@@ -199,6 +199,18 @@ void GetScrap(void **handle, uint32 type, int32 offset)
 
 static void do_getscrap(void **handle, uint32 type, int32 offset)
 {
+	// Keep a host-side template that will be copied into allocated Mac memory
+	static const uint8 proc[] = {
+		0x59, 0x8f,					// subq.l	#4,sp
+		0xa9, 0xfc,					// ZeroScrap()
+		0x2f, 0x3c, 0, 0, 0, 0,		// move.l	#length,-(sp)
+		0x2f, 0x3c, 0, 0, 0, 0,		// move.l	#type,-(sp)
+		0x2f, 0x3c, 0, 0, 0, 0,		// move.l	#outbuf,-(sp)
+		0xa9, 0xfe,					// PutScrap()
+		0x58, 0x8f,					// addq.l	#4,sp
+		uint8(M68K_RTS >> 8), uint8(M68K_RTS)
+	};
+
 	// Get appropriate format for requested data
 	UINT uFormat = 0;
 	switch (type) {
@@ -217,17 +229,21 @@ static void do_getscrap(void **handle, uint32 type, int32 offset)
 	if (hData) {
 		uint8 *data = (uint8 *)GlobalLock(hData);
 		if (data) {
-			uint32 length = GlobalSize(hData);
-			if (length) {
+			// Read the native allocation size without narrowing a 64-bit host value
+			SIZE_T length = GlobalSize(hData);
+			// Keep the combined procedure and text allocation within the Mac pointer size limit
+			if (length && length <= 0x7fffffffU - sizeof(proc)) {
 				int32 out_length = 0;
 
-				// Allocate space for new scrap in MacOS side
+				// Allocate both the procedure and clipboard text in Mac memory
 				M68kRegisters r;
-				r.d[0] = length;
+				r.d[0] = sizeof(proc) + length;
 				Execute68kTrap(0xa71e, &r);	// NewPtrSysClear()
-				uint32 scrap_area = r.a[0];
+				uint32 proc_area = r.a[0];
 
-				if (scrap_area) {
+				if (proc_area) {
+					// Store text immediately after the aligned procedure in the same allocation
+					uint32 scrap_area = proc_area + sizeof(proc);
 					switch (type) {
 					case FOURCC('T','E','X','T'):
 						D(bug(" clipping TEXT\n"));
@@ -251,18 +267,8 @@ static void do_getscrap(void **handle, uint32 type, int32 offset)
 						break;
 					}
 
-					// Add new data to clipboard
-					static uint8 proc[] = {
-						0x59, 0x8f,					// subq.l	#4,sp
-						0xa9, 0xfc,					// ZeroScrap()
-						0x2f, 0x3c, 0, 0, 0, 0,		// move.l	#length,-(sp)
-						0x2f, 0x3c, 0, 0, 0, 0,		// move.l	#type,-(sp)
-						0x2f, 0x3c, 0, 0, 0, 0,		// move.l	#outbuf,-(sp)
-						0xa9, 0xfe,					// PutScrap()
-						0x58, 0x8f,					// addq.l	#4,sp
-						uint8(M68K_RTS >> 8), uint8(M68K_RTS)
-					};
-					uint32 proc_area = Host2MacAddr(proc);
+					// Execute a copy of the clipboard procedure from real Mac memory
+					Host2Mac_memcpy(proc_area, proc, sizeof(proc));
 					WriteMacInt32(proc_area +  6, out_length);
 					WriteMacInt32(proc_area + 12, type);
 					WriteMacInt32(proc_area + 18, scrap_area);
@@ -270,7 +276,7 @@ static void do_getscrap(void **handle, uint32 type, int32 offset)
 					Execute68k(proc_area, &r);
 
 					// We are done with scratch memory
-					r.a[0] = scrap_area;
+					r.a[0] = proc_area;
 					Execute68kTrap(0xa01f, &r);		// DisposePtr
 				}
 			}
