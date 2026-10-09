@@ -31,6 +31,7 @@
 #include "extfs_defs.h"
 #include "prefs.h"
 #include <ctype.h>
+#include <limits>
 
 
 #define DEBUG_EXTFS 0
@@ -840,11 +841,11 @@ int my_stat( const char *path, struct my_stat *st )
 		LPCTSTR host_path = MRP(tpath.get());
 		result = _tstat( host_path, (struct _stat *)st );
 		if(result < 0) {
-			// Query search metadata when the CRT cannot open a protected entry
+			// Query search metadata for protected entries and files too large for the CRT
 			int stat_errno = errno;
 			WIN32_FIND_DATA data;
 			HANDLE find = INVALID_HANDLE_VALUE;
-			if (stat_errno == ENOENT || stat_errno == EACCES)
+			if (stat_errno == ENOENT || stat_errno == EACCES || stat_errno == EOVERFLOW)
 				find = FindFirstFile(host_path, &data);
 			if (find != INVALID_HANDLE_VALUE) {
 				// Return file or directory metadata so catalog enumeration can continue
@@ -855,8 +856,12 @@ int my_stat( const char *path, struct my_stat *st )
 				if (!(data.dwFileAttributes & FILE_ATTRIBUTE_READONLY))
 					st->st_mode |= _S_IWRITE;
 				st->st_nlink = 1;
-				if (!is_directory)
-					st->st_size = (_off_t)(((unsigned long long)data.nFileSizeHigh << 32) | data.nFileSizeLow);
+				if (!is_directory) {
+					// Cap oversized files at the largest size the signed metadata field can represent
+					unsigned long long size = ((unsigned long long)data.nFileSizeHigh << 32) | data.nFileSizeLow;
+					_off_t max_size = (std::numeric_limits<_off_t>::max)();
+					st->st_size = size > (unsigned long long)max_size ? max_size : (_off_t)size;
+				}
 				st->st_atime = file_time_to_unix_time(data.ftLastAccessTime);
 				st->st_mtime = file_time_to_unix_time(data.ftLastWriteTime);
 				st->st_ctime = file_time_to_unix_time(data.ftCreationTime);
@@ -878,6 +883,26 @@ int my_fstat( int fd, struct my_stat *st )
 {
 	DISABLE_ERRORS;
 	int result = _fstat( fd, (struct _stat *)st );
+	if (result < 0 && errno == EOVERFLOW) {
+		// Recover open-file metadata without overflowing the CRT's 32-bit size field
+		struct _stat64 wide;
+		result = _fstat64(fd, &wide);
+		if (result == 0) {
+			// Preserve the expected stat layout while capping the oversized file length
+			st->st_dev = wide.st_dev;
+			st->st_ino = wide.st_ino;
+			st->st_mode = wide.st_mode;
+			st->st_nlink = wide.st_nlink;
+			st->st_uid = wide.st_uid;
+			st->st_gid = wide.st_gid;
+			st->st_rdev = wide.st_rdev;
+			_off_t maximum = (std::numeric_limits<_off_t>::max)();
+			st->st_size = wide.st_size > maximum ? maximum : (_off_t)wide.st_size;
+			st->st_atime = wide.st_atime;
+			st->st_mtime = wide.st_mtime;
+			st->st_ctime = wide.st_ctime;
+		}
+	}
 	if(result < 0) {
 		my_errno = errno;
 	} else {

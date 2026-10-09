@@ -126,6 +126,13 @@ const int STACK_SIZE = 0x10000;
 const int AL_BLK_SIZE = 0x4000;
 const int CLUMP_SIZE = 0x4000;
 
+static uint32 extfs_file_size(uint64 size)
+{
+	// Leave room for allocation-block rounding within the signed Mac file-size range
+	const uint32 maximum = 0x7fffffffU - AL_BLK_SIZE;
+	return size > maximum ? maximum : (uint32)size;
+}
+
 // Drive number of our pseudo-drive
 static int drive_number;
 
@@ -1324,11 +1331,13 @@ read_next_de:
 	get_finfo(full_path, pb + ioFlFndrInfo, hfs ? pb + ioFlXFndrInfo : 0, false);
 
 	WriteMacInt16(pb + ioFlStBlk, 0);
-	uint32 file_size = (uint32) st.st_size;
+	// Report a size whose rounded allocation remains positive in MacOS
+	uint32 file_size = extfs_file_size(st.st_size);
 	WriteMacInt32(pb + ioFlLgLen, file_size);
 	WriteMacInt32(pb + ioFlPyLen, (file_size | (AL_BLK_SIZE - 1)) + 1);
 	WriteMacInt16(pb + ioFlRStBlk, 0);
-	uint32 rf_size = get_rfork_size(full_path);
+	// Keep resource-fork allocation sizes within the same MacOS limit
+	uint32 rf_size = extfs_file_size(get_rfork_size(full_path));
 	WriteMacInt32(pb + ioFlRLgLen, rf_size);
 	WriteMacInt32(pb + ioFlRPyLen, (rf_size | (AL_BLK_SIZE - 1)) + 1);
 
@@ -1481,11 +1490,13 @@ read_next_de:
 		WriteMacInt16(pb + ioDrNmFls, count);
 	} else {
 		WriteMacInt16(pb + ioFlStBlk, 0);
-		uint32 file_size = (uint32) st.st_size;
+		// Report a size whose rounded allocation remains positive in MacOS
+		uint32 file_size = extfs_file_size(st.st_size);
 		WriteMacInt32(pb + ioFlLgLen, file_size);
 		WriteMacInt32(pb + ioFlPyLen, (file_size | (AL_BLK_SIZE - 1)) + 1);
 		WriteMacInt16(pb + ioFlRStBlk, 0);
-		uint32 rf_size = get_rfork_size(full_path);
+		// Keep resource-fork allocation sizes within the same MacOS limit
+		uint32 rf_size = extfs_file_size(get_rfork_size(full_path));
 		WriteMacInt32(pb + ioFlRLgLen, rf_size);
 		WriteMacInt32(pb + ioFlRPyLen, (rf_size | (AL_BLK_SIZE - 1)) + 1);
 		WriteMacInt32(pb + ioFlClpSiz, 0);
@@ -1592,7 +1603,8 @@ static int16 fs_open(uint32 pb, uint32 dirID, uint32 vcb, bool resource_fork)
 	// Initialize FCB, fd is stored in fcbCatPos
 	WriteMacInt32(fcb + fcbFlNm, fs_item->id);
 	WriteMacInt8(fcb + fcbFlags, ((flag == O_WRONLY || flag == O_RDWR) ? fcbWriteMask : 0) | (resource_fork ? fcbResourceMask : 0) | (write_ok ? 0 : fcbFileLockedMask));
-	uint32 file_size = (uint32) st.st_size;
+	// Report a size whose rounded allocation remains positive in MacOS
+	uint32 file_size = extfs_file_size(st.st_size);
 	WriteMacInt32(fcb + fcbEOF, file_size);
 	WriteMacInt32(fcb + fcbPLen, (file_size | (AL_BLK_SIZE - 1)) + 1);
 	WriteMacInt32(fcb + fcbCrPs, 0);
@@ -1714,7 +1726,8 @@ static int16 fs_get_eof(uint32 pb)
 		return errno2oserr();
 
 	// Adjust FCBs
-	uint32 file_size = (uint32) st.st_size;
+	// Report a size whose rounded allocation remains positive in MacOS
+	uint32 file_size = extfs_file_size(st.st_size);
 	WriteMacInt32(fcb + fcbEOF, file_size);
 	WriteMacInt32(fcb + fcbPLen, (file_size | (AL_BLK_SIZE - 1)) + 1);
 	WriteMacInt32(pb + ioMisc, file_size);
