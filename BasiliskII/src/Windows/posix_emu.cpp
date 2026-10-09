@@ -818,6 +818,15 @@ struct DIR *opendir( const char *path )
 	return d;
 }
 
+static time_t file_time_to_unix_time(const FILETIME &ft)
+{
+	// Convert Windows 100-nanosecond ticks since 1601 to Unix seconds
+	ULARGE_INTEGER ticks;
+	ticks.LowPart = ft.dwLowDateTime;
+	ticks.HighPart = ft.dwHighDateTime;
+	return (time_t)((long long)(ticks.QuadPart / 10000000ULL) - 11644473600LL);
+}
+
 static void dump_stat( const struct my_stat *st )
 {
 	D(bug("stat: size = %ld, mode = %ld, a = %ld, m = %ld, c = %ld\n", st->st_size, st->st_mode, st->st_atime, st->st_mtime, st->st_ctime));
@@ -840,9 +849,33 @@ int my_stat( const char *path, struct my_stat *st )
 		result = 0;
 		my_errno = 0;
 	} else {
-		result = _tstat( MRP(tpath.get()), (struct _stat *)st );
+		// Keep the translated path available for both metadata queries
+		LPCTSTR host_path = MRP(tpath.get());
+		result = _tstat( host_path, (struct _stat *)st );
 		if(result < 0) {
-			my_errno = errno;
+			// Query search metadata when the CRT cannot open a protected entry
+			int stat_errno = errno;
+			WIN32_FIND_DATA data;
+			HANDLE find = INVALID_HANDLE_VALUE;
+			if (stat_errno == ENOENT || stat_errno == EACCES)
+				find = FindFirstFile(host_path, &data);
+			if (find != INVALID_HANDLE_VALUE) {
+				// Return file or directory metadata so catalog enumeration can continue
+				FindClose(find);
+				memset(st, 0, sizeof(*st));
+				bool is_directory = (data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) != 0;
+				st->st_mode = (is_directory ? _S_IFDIR | _S_IEXEC : _S_IFREG) | _S_IREAD;
+				if (!(data.dwFileAttributes & FILE_ATTRIBUTE_READONLY))
+					st->st_mode |= _S_IWRITE;
+				st->st_nlink = 1;
+				if (!is_directory)
+					st->st_size = (_off_t)(((unsigned long long)data.nFileSizeHigh << 32) | data.nFileSizeLow);
+				st->st_atime = file_time_to_unix_time(data.ftLastAccessTime);
+				st->st_mtime = file_time_to_unix_time(data.ftLastWriteTime);
+				st->st_ctime = file_time_to_unix_time(data.ftCreationTime);
+				result = 0;
+			}
+			my_errno = result < 0 ? stat_errno : 0;
 		} else {
 			my_errno = 0;
 		}
