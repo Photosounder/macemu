@@ -30,6 +30,7 @@
 
 void init_posix_emu(void);
 void final_posix_emu(void);
+void init_extfs_custom_icon(const char *icon_path, const char *volume_path);
 
 typedef struct dirent {
 	char d_name[MAX_PATH_LENGTH];

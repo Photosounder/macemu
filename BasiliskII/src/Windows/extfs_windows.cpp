@@ -29,6 +29,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
+#include <map>
+#include <string>
 
 
 #define DEBUG 0
@@ -43,13 +45,86 @@
 // Default Finder flags
 const uint16 DEFAULT_FINDER_FLAGS = kHasBeenInited;
 
+struct FinderInfo {
+	uint8 info[SIZEOF_FInfo];
+	uint8 extended_info[SIZEOF_FXInfo];
+};
+
+struct FinderPathLess {
+	bool operator()(const std::string &a, const std::string &b) const
+	{
+		// Match Windows paths without distinguishing letter case
+		return _stricmp(a.c_str(), b.c_str()) < 0;
+	}
+};
+
+typedef std::map<std::string, FinderInfo, FinderPathLess> FinderInfoCache;
+static FinderInfoCache finder_info;
+
+static bool finder_info_in_path(const std::string &entry, const char *path)
+{
+	// Match the item and its descendants without matching sibling name prefixes
+	size_t length = strlen(path);
+	return _strnicmp(entry.c_str(), path, length) == 0 &&
+		(entry.size() == length || entry[length] == HOST_DIRSEP_CHAR);
+}
+
+static void forget_finder_info(const char *path)
+{
+	// Discard cached metadata for a deleted item and its descendants
+	for (auto it = finder_info.begin(); it != finder_info.end();) {
+		if (finder_info_in_path(it->first, path))
+			it = finder_info.erase(it);
+		else
+			++it;
+	}
+}
+
+static void move_finder_info(const char *old_path, const char *new_path)
+{
+	// Collect metadata for the renamed item and every cached descendant
+	FinderInfoCache moved;
+	size_t old_length = strlen(old_path);
+	for (auto it = finder_info.begin(); it != finder_info.end();) {
+		if (finder_info_in_path(it->first, old_path)) {
+			moved[std::string(new_path) + it->first.substr(old_length)] = it->second;
+			it = finder_info.erase(it);
+		} else
+			++it;
+	}
+
+	// Restore the records under their new paths after removing the old keys
+	for (const auto &entry : moved)
+		finder_info[entry.first] = entry.second;
+}
+
 
 /*
  *  Initialization
  */
 
+void init_extfs_custom_icon(const char *icon_path, const char *volume_path)
+{
+	// Initialize the icon metadata directly in host memory without a guest-address conversion
+	FinderInfo icon = {};
+	icon.info[fdFlags] = kIsInvisible >> 8;
+	icon.info[fdFlags + 1] = kIsInvisible & 0xff;
+	memset(icon.info + fdLocation, 0xff, sizeof(uint32));
+	finder_info[icon_path] = icon;
+
+	// Restore the volume icon flag for the current session
+	FinderInfo volume = {};
+	uint16 flags = DEFAULT_FINDER_FLAGS | kHasCustomIcon;
+	volume.info[fdFlags] = flags >> 8;
+	volume.info[fdFlags + 1] = flags & 0xff;
+	memset(volume.info + fdLocation, 0xff, sizeof(uint32));
+	finder_info[volume_path] = volume;
+}
+
 void extfs_init(void)
 {
+	// Start the session with no saved Finder metadata
+	finder_info.clear();
 	init_posix_emu();
 }
 
@@ -61,6 +136,8 @@ void extfs_init(void)
 void extfs_exit(void)
 {
 	final_posix_emu();
+	// Release Finder metadata when the session ends
+	finder_info.clear();
 }
 
 
@@ -80,15 +157,8 @@ void add_path_component(char *path, const char *component)
 
 
 /*
- *  Finder info and resource forks are kept in helper files
- *
- *  Finder info:
- *    /path/.finf/file
- *  Resource fork:
- *    /path/.rsrc/file
- *
- *  The .finf files store a FInfo/DInfo, followed by a FXInfo/DXInfo
- *  (16+16 bytes)
+ *  Finder info is kept in memory for the session
+ *  Resource forks remain in /path/.rsrc/file helper files
  */
 
 static void make_helper_path(const char *src, char *dest, const char *add, bool only_dir = false)
@@ -147,11 +217,6 @@ static int open_helper(const char *path, const char *add, int flag)
 		}
 	}
 	return fd;
-}
-
-static int open_finf(const char *path, int flag)
-{
-	return open_helper(path, ".finf" HOST_DIRSEP_STR, flag);
 }
 
 static int open_rsrc(const char *path, int flag)
@@ -240,18 +305,16 @@ void get_finfo(const char *path, uint32 finfo, uint32 fxinfo, bool is_dir)
 	WriteMacInt16(finfo + fdFlags, DEFAULT_FINDER_FLAGS);
 	WriteMacInt32(finfo + fdLocation, (uint32)-1);
 
-	// Read Finder info file
-	int fd = open_finf(path, O_RDONLY);
-	if (fd >= 0) {
-		ssize_t actual = read(fd, Mac2HostAddr(finfo), SIZEOF_FInfo);
+	// Return Finder metadata saved during this session
+	auto it = finder_info.find(path);
+	if (it != finder_info.end()) {
+		memcpy(Mac2HostAddr(finfo), it->second.info, SIZEOF_FInfo);
 		if (fxinfo)
-			actual += read(fd, Mac2HostAddr(fxinfo), SIZEOF_FXInfo);
-		close(fd);
-		if (actual >= SIZEOF_FInfo)
-			return;
+			memcpy(Mac2HostAddr(fxinfo), it->second.extended_info, SIZEOF_FXInfo);
+		return;
 	}
 
-	// No Finder info file, translate file name extension to MacOS type/creator
+	// Infer file type and creator when the session has no metadata for this item
 	if (!is_dir) {
 		int path_len = strlen(path);
 		for (int i=0; e2t_translation[i].ext; i++) {
@@ -277,16 +340,11 @@ void set_finfo(const char *path, uint32 finfo, uint32 fxinfo, bool is_dir)
 		D(bug("utime failed on %s, error %d\n", path, GetLastError()));
 	}
 
-	// Open Finder info file
-	int fd = open_finf(path, O_RDWR);
-	if (fd < 0)
-		return;
-
-	// Write file
-	write(fd, Mac2HostAddr(finfo), SIZEOF_FInfo);
+	// Keep Finder info in memory and preserve extended info on basic-only updates
+	FinderInfo &info = finder_info[path];
+	memcpy(info.info, Mac2HostAddr(finfo), SIZEOF_FInfo);
 	if (fxinfo)
-		write(fd, Mac2HostAddr(fxinfo), SIZEOF_FXInfo);
-	close(fd);
+		memcpy(info.extended_info, Mac2HostAddr(fxinfo), SIZEOF_FXInfo);
 }
 
 
@@ -350,52 +408,51 @@ ssize_t extfs_write(int fd, void *buffer, size_t length)
 
 bool extfs_remove(const char *path)
 {
-	// Remove helpers first, don't complain if this fails
+	// Remove the persistent resource fork associated with the item
 	char helper_path[MAX_PATH_LENGTH];
-	make_helper_path(path, helper_path, ".finf" HOST_DIRSEP_STR, false);
-	remove(helper_path);
 	make_helper_path(path, helper_path, ".rsrc" HOST_DIRSEP_STR, false);
 	remove(helper_path);
 
-	// Now remove file or directory (and helper directories in the directory)
+	// Remove the host item and an empty resource-fork helper directory if necessary
 	if (remove(path) < 0) {
-		if (errno == EISDIR || errno == ENOTEMPTY) {
-			helper_path[0] = 0;
-			strncpy(helper_path, path, MAX_PATH_LENGTH-1);
-			add_path_component(helper_path, ".finf");
-			rmdir(helper_path);
-			helper_path[0] = 0;
-			strncpy(helper_path, path, MAX_PATH_LENGTH-1);
-			add_path_component(helper_path, ".rsrc");
-			rmdir(helper_path);
-			return rmdir(path) == 0;
-		} else
+		if (errno != EISDIR && errno != ENOTEMPTY)
+			return false;
+		strncpy(helper_path, path, MAX_PATH_LENGTH - 1);
+		helper_path[MAX_PATH_LENGTH - 1] = 0;
+		add_path_component(helper_path, ".rsrc");
+		rmdir(helper_path);
+		if (rmdir(path) < 0)
 			return false;
 	}
+
+	// Forget metadata only after the host item has been deleted successfully
+	forget_finder_info(path);
 	return true;
 }
 
 
 /*
- *  Rename/move file/directory (and associated helper files),
- *  returns false on error (and sets errno)
+ *  Rename/move file/directory and its resource fork
  */
 
 bool extfs_rename(const char *old_path, const char *new_path)
 {
-	// Rename helpers first, don't complain if this fails
+	// Preserve cached metadata when the host rename fails
+	if (rename(old_path, new_path) < 0)
+		return false;
+
+	// Move an existing resource fork without creating helper folders for ordinary files
 	char old_helper_path[MAX_PATH_LENGTH], new_helper_path[MAX_PATH_LENGTH];
-	make_helper_path(old_path, old_helper_path, ".finf" HOST_DIRSEP_STR, false);
-	make_helper_path(new_path, new_helper_path, ".finf" HOST_DIRSEP_STR, false);
-	create_helper_dir(new_path, ".finf" HOST_DIRSEP_STR);
-	rename(old_helper_path, new_helper_path);
 	make_helper_path(old_path, old_helper_path, ".rsrc" HOST_DIRSEP_STR, false);
 	make_helper_path(new_path, new_helper_path, ".rsrc" HOST_DIRSEP_STR, false);
-	create_helper_dir(new_path, ".rsrc" HOST_DIRSEP_STR);
-	rename(old_helper_path, new_helper_path);
+	if (access(old_helper_path, F_OK) == 0) {
+		create_helper_dir(new_path, ".rsrc" HOST_DIRSEP_STR);
+		rename(old_helper_path, new_helper_path);
+	}
 
-	// Now rename file
-	return rename(old_path, new_path) == 0;
+	// Keep the item and its descendants associated with their session metadata
+	move_finder_info(old_path, new_path);
+	return true;
 }
 
 

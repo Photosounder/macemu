@@ -392,32 +392,19 @@ void init_posix_emu(void)
 		int fd = my_creat( custom_icon_name, 0 );
 		if(fd >= 0) {
 			my_close(fd);
-			struct my_stat custom_icon_stat;
-			int stat_result = my_stat( custom_icon_name, &custom_icon_stat );
 			fd = open_rfork( custom_icon_name, O_RDWR|O_CREAT );
 			if(fd >= 0) {
 				my_write( fd, my_comp_icon, sizeof(my_comp_icon) );
 				my_close(fd);
-				// need room for the things from around the finfo that set_finfo reads
-				static uint8 custom_icon_hfile[ioFlXFndrInfo + SIZEOF_FXInfo];
-				memset(custom_icon_hfile, 0, ioFlXFndrInfo + SIZEOF_FXInfo);
-				static uint8 * host_finfo = custom_icon_hfile + ioFlFndrInfo;
-				uint32 finfo = Host2MacAddr(host_finfo);
-				get_finfo(custom_icon_name, finfo, 0, false);
-				WriteMacInt16(finfo + fdFlags, kIsInvisible);
-				if (stat_result == 0) {
-					WriteMacInt32(finfo - ioFlFndrInfo + ioFlCrDat, TimeToMacTime(custom_icon_stat.st_ctime));
-					WriteMacInt32(finfo - ioFlFndrInfo + ioFlMdDat, TimeToMacTime(custom_icon_stat.st_mtime));
-				}
-				set_finfo(custom_icon_name, finfo, 0, false);
-				get_finfo(my_computer, finfo, 0, true);
-				WriteMacInt16(finfo + fdFlags, ReadMacInt16(finfo + fdFlags) | kHasCustomIcon);
-				set_finfo(my_computer, finfo, 0, true);
 			} else {
 				my_remove(custom_icon_name);
 			}
 		}
 	}
+
+	// Restore the desktop icon flags using host memory in the session cache
+	if (my_access(custom_icon_name, F_OK) == 0)
+		init_extfs_custom_icon(custom_icon_name, my_computer);
 }
 
 void final_posix_emu(void)
