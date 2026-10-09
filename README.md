@@ -1,3 +1,9 @@
+# Basilisk II and SheepShaver
+
+This repository contains the Basilisk II 68k Macintosh emulator and the SheepShaver PowerPC Mac OS runtime environment. Both require a copy of Mac OS and a compatible Macintosh ROM image.
+
+Releases and support are available from the [Emaculation community](https://www.emaculation.com/). See the [detailed Basilisk II README](BasiliskII/README.md) for features and configuration information.
+
 #### BasiliskII
 ```
 macOS     x86_64 JIT / arm64 non-JIT

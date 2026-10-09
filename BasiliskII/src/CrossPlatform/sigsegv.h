@@ -121,7 +121,7 @@ extern "C" {
 #define SIGSEGV_SKIP_INSTRUCTION		aarch64_skip_instruction
 #endif
 
-#ifdef __x86_64__
+#if defined(__x86_64__) || defined(__aarch64__)
 #define SIGSEGV_FAULT_ADDRESS_FAST		(((uint64_t)code[1])|0x100000000)
 #else
 #define SIGSEGV_FAULT_ADDRESS_FAST		code[1]

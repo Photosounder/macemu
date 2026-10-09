@@ -18,8 +18,11 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-#include <Cocoa/Cocoa.h>
 #include "sysdeps.h"
+
+// Define _UINT64 to avoid a conflict with a Security framework header
+#define _UINT64
+#include <Cocoa/Cocoa.h>
 #include <SDL.h>
 #include "utils_macosx.h"
 

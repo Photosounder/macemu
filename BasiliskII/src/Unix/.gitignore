@@ -29,3 +29,5 @@ g_resource.cpp
 
 patches/*
 .pc*
+Darwin/lowmem
+Darwin/pagezero

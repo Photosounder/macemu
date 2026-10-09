@@ -282,7 +282,8 @@ static void read_line(char *prompt)
 	static const unsigned INPUT_LENGTH = 256;
 	if (!input)
 		input = (char *)malloc(INPUT_LENGTH);
-	fprintf(monout, prompt);
+	// Print the prompt without interpreting format specifiers
+	fputs(prompt, monout);
 	fflush(monout);
 	fgets(in_ptr = input, INPUT_LENGTH, monin);
 	char *s = strchr(input, '\n');
@@ -1254,8 +1255,9 @@ void mon(int argc, const char **argv)
 	char *cmd = NULL;
 	while (!done) {
 		if (interactive) {
-			char prompt[16];
-			sprintf(prompt, "[%0*lx]-> ", int(2 * sizeof(mon_dot_address)), mon_dot_address);
+			// Bound the prompt formatting and leave room for a 64-bit address
+			char prompt[32];
+			snprintf(prompt, sizeof(prompt), "[%0*lx]-> ", int(2 * sizeof(mon_dot_address)), mon_dot_address);
 			read_line(prompt);
 			if (!input) {
 				done = true;
