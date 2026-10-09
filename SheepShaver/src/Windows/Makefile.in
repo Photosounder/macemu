@@ -39,7 +39,7 @@ CFLAGS = @CFLAGS@ $(SDL_CFLAGS)
 CXXFLAGS = @CXXFLAGS@ $(SDL_CFLAGS)
 CPPFLAGS = @CPPFLAGS@ -I../include -I. -I../slirp
 DEFS = @DEFS@
-LDFLAGS = @LDFLAGS@ -Wl,-Bstatic
+LDFLAGS = @LDFLAGS@ -static
 #TODO remove pthread part of that if irrelevant
 LIBS = @LIBS@ -lws2_32 -lwsock32 -liphlpapi
 CPUSRCS = @CPUSRCS@
@@ -130,10 +130,10 @@ SRC_PATHS += $(sort $(foreach file, $(SRCS), $(dir $(file))))
 VPATH :=
 VPATH += $(addprefix :, $(subst  ,:, $(filter-out $($(subst, :, ,$(VPATH))), $(SRC_PATHS))))
 
-$(APP): $(XPLATSRCS) $(OBJ_DIR) $(OBJS)
+$(APP): Makefile $(XPLATSRCS) $(OBJ_DIR) $(OBJS)
 	$(CXX) -o $(APP) $(LDFLAGS) $(OBJS) $(LIBS) $(SDL_LIBS)
 
-$(UI_APP): $(XPLATSRCS) $(OBJ_DIR) $(UI_OBJS)
+$(UI_APP): Makefile $(XPLATSRCS) $(OBJ_DIR) $(UI_OBJS)
 	$(CXX) -o $@ $(LDFLAGS) $(UI_OBJS) $(LIBS) -Wl,-Bdynamic $(GTK_LIBS) -Wl,-Bstatic -mwindows -static-libgcc
 
 mostlyclean:
