@@ -15,6 +15,13 @@ I/O and SDLwindow presentation and input. Run `bash build_wahe.sh` in
 `SheepShaver`; see the [WAHE build and host integration guide](SheepShaver/WAHE.md)
 for the callback protocol, sample archive, supported devices, and headless tests.
 
+## Wasm WAHE module
+
+`bash SheepShaver/build_wahe_wasm.sh` builds `SheepShaver/sheepshaver.wasm`
+using MSYS2's Clang directly. It uses shared Wasm memory and WAHE callbacks,
+without WASI, an application entry point, or C++/Wasm exception handling.
+See [the runtime dependencies and host requirements](SheepShaver/WAHE.md#wasm-build).
+
 ### Clankerslop changes by me, Michel Rouzic
 
 - **Merged the two incompatible upstream codebases.** Reconciled the [kanjitalk755/macemu](https://github.com/kanjitalk755/macemu) fork with the latest [cebix/macemu master](https://github.com/cebix/macemu/tree/master), merging the 31 outstanding commits. Resolved conflicts while preserving the fork's existing ARM64, GTK, memory-management, and macOS build configuration, and incorporated the upstream GNU configuration scripts.

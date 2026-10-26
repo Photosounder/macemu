@@ -326,8 +326,14 @@ void *powerpc_cpu::operator new(size_t size)
 
 	// Allocate enough space for powerpc_cpu data + signature + align pad
 	uint8 *ptr = (uint8 *)malloc(size + ALIGN * 2);
-	if (ptr == NULL)
+	if (ptr == NULL) {
+		// Report unrecoverable allocation failure without linking Wasm exception support
+#ifdef SHEEPSHAVER_WAHE_WASM
+		abort();
+#else
 		throw std::bad_alloc();
+#endif
+	}
 
 	// Align memory
 	int ofs = 0;
@@ -508,8 +514,12 @@ void powerpc_registers::interrupt_copy(powerpc_registers &oregs, powerpc_registe
 
 bool powerpc_cpu::check_spcflags()
 {
-#ifdef SHEEPSHAVER_WAHE
-	// Unwind nested emulation calls cooperatively when the embedding host stops the module
+#ifdef SHEEPSHAVER_WAHE_WASM
+	// Keep interrupt handling local while the periodic interpreter polls supply host time and pause checks
+	extern bool wahe_stop_requested();
+	if (wahe_stop_requested()) return false;
+#elif defined(SHEEPSHAVER_WAHE)
+	// Unwind the native worker at its established safe points
 	extern void wahe_check_stop();
 	wahe_check_stop();
 #endif
@@ -642,6 +652,11 @@ void powerpc_cpu::execute(uint32 entry)
 			dpc = pc() - 4;
 			do {
 				uint32 opcode = vm_read_memory_4(dpc += 4);
+#ifdef SHEEPSHAVER_WAHE_WASM
+				// Stop decoding immediately if an instruction fetch failed or shutdown was requested
+				extern bool wahe_stop_requested();
+				if (wahe_stop_requested()) goto return_site;
+#endif
 				ii = decode(opcode);
 #if PPC_EXECUTE_DUMP_STATE
 				if (dump_state) {
@@ -703,6 +718,14 @@ void powerpc_cpu::execute(uint32 entry)
 					} while (--n > 0);
 				}
 
+#ifdef SHEEPSHAVER_WAHE_WASM
+				// Poll the host clock periodically even while no guest interrupt is pending
+				static unsigned wahe_poll_blocks;
+				if ((++wahe_poll_blocks & 1023) == 0) { extern void wahe_check_stop(); wahe_check_stop(); }
+				// Propagate shutdown out of decoded execution without stack unwinding
+				extern bool wahe_stop_requested();
+				if (wahe_stop_requested()) goto return_site;
+#endif
 				if (!spcflags().empty()) {
 					if (!check_spcflags())
 						goto return_site;
@@ -727,6 +750,11 @@ void powerpc_cpu::execute(uint32 entry)
   do_interpret:
 	for (;;) {
 		uint32 opcode = vm_read_memory_4(pc());
+#ifdef SHEEPSHAVER_WAHE_WASM
+		// Stop nested execution before dispatching an invalid fetch or another guest instruction
+		extern bool wahe_stop_requested();
+		if (wahe_stop_requested()) goto return_site;
+#endif
 		const instr_info_t *ii = decode(opcode);
 #if PPC_EXECUTE_DUMP_STATE
 		if (dump_state)
@@ -745,6 +773,13 @@ void powerpc_cpu::execute(uint32 entry)
 #if PPC_EXECUTE_DUMP_STATE
 		if (dump_state)
 			dump_registers();
+#endif
+#ifdef SHEEPSHAVER_WAHE_WASM
+		// Bound shutdown latency during nested interpretation without requiring a native timer thread
+		static unsigned wahe_poll_instructions;
+		if ((++wahe_poll_instructions & 1023) == 0) { extern void wahe_check_stop(); wahe_check_stop(); }
+		// Complete the nested call normally once its owner has requested shutdown
+		if (wahe_stop_requested()) goto return_site;
 #endif
 		if (!spcflags().empty() && !check_spcflags())
 			goto return_site;

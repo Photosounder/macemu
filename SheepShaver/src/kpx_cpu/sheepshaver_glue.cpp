@@ -765,6 +765,7 @@ static void dump_disassembly(const uint32 pc, const int prefix_count, const int 
 	}
 }
 
+#ifndef SHEEPSHAVER_WAHE_WASM
 sigsegv_return_t sigsegv_handler(sigsegv_info_t *sip)
 {
 #if ENABLE_VOSF
@@ -836,6 +837,7 @@ sigsegv_return_t sigsegv_handler(sigsegv_info_t *sip)
 
 	return SIGSEGV_RETURN_FAILURE;
 }
+#endif
 
 /*
  *  Initialize CPU emulation

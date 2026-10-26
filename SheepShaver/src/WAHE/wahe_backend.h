@@ -6,6 +6,15 @@
 #include <mutex>
 #include <string>
 #include <vector>
+#ifdef __wasm32__
+#include "wasm/mutex.h"
+void wahe_wasm_run();
+void wahe_wasm_sleep(uint32 microseconds);
+bool wahe_wasm_map(uint32 address, size_t size);
+#else
+using WaheMutex = std::mutex;
+using WaheRecursiveMutex = std::recursive_mutex;
+#endif
 
 struct WaheStop {};
 extern std::atomic<bool> wahe_stopping, wahe_running, wahe_paused;
@@ -15,12 +24,13 @@ extern int wahe_width, wahe_height, wahe_sample_rate;
 extern double wahe_monitor_gamma;
 extern bool wahe_force_identity_gamma;
 extern std::string wahe_error, wahe_nvram_path;
-extern std::mutex wahe_error_mutex;
+extern WaheMutex wahe_error_mutex;
 
 char *wahe_request(const std::string &command);
 void wahe_log(const std::string &message) noexcept;
 void wahe_fail(const std::string &message);
 void wahe_check_stop();
+bool wahe_stop_requested();
 void wahe_wake();
 void wahe_input(const std::string &line, bool allow_relative = true);
 void wahe_dispatch_input();
@@ -38,5 +48,5 @@ uint64 wahe_file_size(WaheFile *file);
 void wahe_start();
 void wahe_stop();
 std::string wahe_status();
-void wahe_configure(const std::string &line);
+const char *wahe_configure(const std::string &line);
 #endif

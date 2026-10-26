@@ -1,0 +1,29 @@
+WAHE 0.0
+Module SDL_window: "../../../../wahe/modules/SDLwindow/SDLwindow.dll"
+Module SheepShaver: "sheepshaver.wasm"
+
+Send to SDL_window: Window title SheepShaver
+Send to SDL_window: Window size 960x540
+Send to SDL_window: Show cursor -1
+Send to SDL_window: Keyboard grab
+Send to SheepShaver: SheepShaver resolution 960x540
+Send to SheepShaver: SheepShaver RAM 64
+Send to SheepShaver: SheepShaver gamma table identity
+Send to SheepShaver: SheepShaver monitor gamma 1.8
+Send to SheepShaver: SheepShaver ROM path D:\Samsung F3\Principal\Bureau\Mac emulators\SheepShaver\macos8.6.rom
+Send to SheepShaver: SheepShaver disk path D:\Samsung F3\Principal\Bureau\Mac emulators\SheepShaver\Mac HD.hfv
+Send to SheepShaver: SheepShaver disk path D:\Samsung F3\Principal\Bureau\Mac emulators\SheepShaver\Apps.hfv
+Send to SheepShaver: SheepShaver sample rate 44100
+Send to System_audio: Audio sample rate 44100
+
+Chain main
+Order Window_input: type module_func, module SDL_window, func draw
+Order Mac_input: type module_func, module SheepShaver, func input
+Order Mac_draw: type module_func, module SheepShaver, func draw
+Order Window_present: type module_func, module SDL_window, func proc_image
+Connection Window_input - Mac_input
+Connection Mac_draw - Window_present
+
+Chain audio
+Order Mac_audio: type module_func, module SheepShaver, func proc_sound
+Connection chain_input_msg - Mac_audio

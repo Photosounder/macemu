@@ -1,7 +1,9 @@
 /* SPDX-License-Identifier: GPL-2.0-or-later */
 #ifndef SHEEPSHAVER_WAHE_CONFIG_H
 #define SHEEPSHAVER_WAHE_CONFIG_H
-#if !defined(_WIN32) || !defined(__x86_64__)
+#if defined(__wasm32__)
+#define SHEEPSHAVER_WAHE_WASM 1
+#elif !defined(_WIN32) || !defined(__x86_64__)
 #error The native WAHE backend currently targets Windows x86-64
 #endif
 #define HAVE_CEIL 1
@@ -23,16 +25,22 @@
 #define HAVE_SYS_STAT_H 1
 #define HAVE_SYS_TYPES_H 1
 #define HAVE_UNISTD_H 1
+#ifndef SHEEPSHAVER_WAHE_WASM
 #define HAVE_WIN32_EXCEPTIONS 1
 #define HAVE_WIN32_VM 1
 #define HAVE_SIGSEGV_SKIP_INSTRUCTION 1
+#endif
 #define SIZEOF_DOUBLE 8
 #define SIZEOF_FLOAT 4
 #define SIZEOF_INT 4
 #define SIZEOF_LONG 4
 #define SIZEOF_LONG_LONG 8
 #define SIZEOF_SHORT 2
+#ifdef SHEEPSHAVER_WAHE_WASM
+#define SIZEOF_VOID_P 4
+#else
 #define SIZEOF_VOID_P 8
+#endif
 #define STDC_HEADERS 1
 #define _FILE_OFFSET_BITS 64
 #define PACKAGE_NAME "SheepShaver WAHE"

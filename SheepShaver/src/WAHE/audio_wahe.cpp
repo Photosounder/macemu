@@ -7,7 +7,7 @@
 #include "prefs.h"
 #include <deque>
 
-static std::mutex audio_mutex;
+static WaheMutex audio_mutex;
 static std::deque<float> audio_queue;
 static std::atomic<bool> requested{false};
 static bool main_muted, speaker_muted;
@@ -28,7 +28,7 @@ void AudioInit()
     audio_component_flags = cmpWantsRegisterMessage | kStereoOut | k16BitOut;
     audio_open = !PrefsFindBool("nosound");
 }
-void AudioExit() { /* Release queued samples after joining the CPU */ std::lock_guard<std::mutex> lock(audio_mutex); audio_queue.clear(); audio_open = false; }
+void AudioExit() { /* Release queued samples after joining the CPU */ std::lock_guard<WaheMutex> lock(audio_mutex); audio_queue.clear(); audio_open = false; }
 void audio_enter_stream() { /* The host controls when audio is requested */ }
 void audio_exit_stream() { /* Stop publishing samples when Mac OS removes its last source */ }
 
@@ -41,7 +41,7 @@ bool wahe_audio_needed()
 void wahe_audio_pull(float *output, size_t frames)
 {
     // Return queued stereo samples immediately and use silence for underruns
-    std::lock_guard<std::mutex> lock(audio_mutex);
+    std::lock_guard<WaheMutex> lock(audio_mutex);
     for (size_t i = 0; i < frames * 2; ++i) {
         output[i] = audio_queue.empty() ? 0.f : audio_queue.front();
         if (!audio_queue.empty()) audio_queue.pop_front();
@@ -65,7 +65,7 @@ void AudioInterrupt()
     if (!address || frames > 65536 || (channels != 1 && channels != 2) || (bits != 8 && bits != 16)) return;
 
     // Convert big-endian guest samples into bounded interleaved float storage
-    std::lock_guard<std::mutex> lock(audio_mutex);
+    std::lock_guard<WaheMutex> lock(audio_mutex);
     const uint8 *source = Mac2HostAddr(address);
     for (uint32 frame = 0; frame < frames && audio_queue.size() + 2 <= 131072; ++frame) for (int channel = 0; channel < 2; ++channel) {
         size_t index = (size_t)frame * channels + (channels == 1 ? 0 : channel);

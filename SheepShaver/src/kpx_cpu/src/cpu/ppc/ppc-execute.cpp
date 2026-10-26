@@ -47,6 +47,10 @@
 #include "mon_disass.h"
 #endif
 
+#ifdef SHEEPSHAVER_WAHE_WASM
+#include <string>
+#endif
+
 #define DEBUG 0
 #include "debug.h"
 
@@ -72,7 +76,13 @@ void powerpc_cpu::execute_illegal(uint32 opcode)
 	const char *arg[4] = {"mon", "-m", "-r", NULL};
 	mon(3, arg);
 #endif
+#ifdef SHEEPSHAVER_WAHE_WASM
+	// Report illegal instructions through the module lifecycle and return to CPU cleanup
+	extern void wahe_fail(const std::string &);
+	wahe_fail("Illegal PowerPC instruction");
+#else
 	abort();
+#endif
 }
 
 void powerpc_cpu::execute_nop(uint32 opcode)

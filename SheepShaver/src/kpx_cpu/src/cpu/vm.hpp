@@ -204,6 +204,9 @@ const uintptr VMBaseDiff = NATMEM_OFFSET;
 #define vm_wrap_address(ADDR) (ADDR)
 #endif
 
+#ifdef SHEEPSHAVER_WAHE_WASM
+#include "wasm/vm_access.h"
+#else
 #if REAL_ADDRESSING || DIRECT_ADDRESSING
 static inline uint8 * vm_do_get_real_address(vm_addr_t addr)
 {
@@ -304,5 +307,6 @@ static inline void *vm_memcpy(vm_addr_t dest, vm_addr_t src, size_t n)
 }
 #endif
 
-#endif /* VM_H */
+#endif
 
+#endif

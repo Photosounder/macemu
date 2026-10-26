@@ -1,6 +1,7 @@
-# Native WAHE module
+# WAHE modules
 
-This backend builds SheepShaver as a Windows x86-64 native WAHE DLL. It runs the
+These backends build SheepShaver as a Windows x86-64 WAHE DLL or a freestanding
+wasm32 WAHE module. Both run the
 existing PowerPC interpreter, ROM patches, Macintosh disk drivers, video driver,
 Sound Manager component, ADB emulation, and Time Manager. It exports callbacks
 instead of an application `main`, `WinMain`, or `SDL_main`.
@@ -30,6 +31,68 @@ and generates its own PowerPC instruction implementation; running the desktop
 
 Overrides: `CC`, `CXX`, `WAHE_INCLUDE_DIR`, `SHEEPSHAVER_WAHE_BUILD_DIR`, and
 `SHEEPSHAVER_WAHE_OUTPUT`.
+
+## Wasm build
+
+From MSYS2, run:
+
+```sh
+cd SheepShaver
+bash build_wahe_wasm.sh
+```
+
+This produces `sheepshaver.wasm` using **MSYS2's `clang` and `wasm-ld` directly**.
+Perl generates the PowerPC instruction implementation, and Node.js audits the binary.
+The build script does not invoke `emcc`, generate JavaScript glue, use WASI, or
+link exception support. C++ is compiled with `-fno-exceptions`. Configuration and
+startup errors use replies, `Status`, and `Print`; guest quit and host shutdown
+return normally through nested interpreter calls to the CPU runner's cleanup.
+
+The compiler still needs target C/C++ headers and static runtime libraries.
+The tested combination is MSYS2 Clang 23 with the Emscripten 5.0.7 musl/libc++
+sysroot, used only as headers and static archives. Set `WASM_SYSROOT` to that
+sysroot and `WASM_LIBC_SOURCE` to its matching `system/lib/libc/musl` source
+folder. The latter supplies the private stdio layout used by the callback-backed
+console adapter. The sysroot must contain `libc++-mt-noexcept.a`,
+`libc++abi-mt-noexcept.a`, `libc-mt.a`, and `libcompiler_rt-mt.a` under
+`lib/wasm32-emscripten`. The local dependency cache under `build-wahe/wasm-toolchain`
+is used by default when present. `WAHE_INCLUDE_DIR` must also contain
+`wahe_imports.h`, `cita_wasm.h`, and `cit_alloc.h`.
+
+The resulting binary imports exactly `env.memory` and `env.wahe_run_command`.
+A post-link audit rejects additional imports, application entry exports, and
+exception tags. The linker initializes shared data during instantiation; guest
+execution begins only through WAHE callbacks. Shared memory, Wasm atomics, bulk memory, and SIMD are required. Guest RAM,
+ROM, video memory and SheepShaver globals have compact backing allocations;
+the unused gaps in the Macintosh address space consume no linear memory.
+ROM and zero-page protection is implemented by the guest memory accessors.
+
+Use `sheepshaver_wasm.wahe` with a WAHE host that supports shared-memory Wasm
+modules and the `Create thread` / `Join thread ID` commands. SDLwindow and the
+file/audio providers can remain native modules. The CPU runs in a host-created
+runner with its own stack and TLS. The module exports `_initialize` and the
+standard WAHE callbacks, including `module_thread_entry`; it has no `main` or
+`_start`. It uses the same settings, linear float framebuffer, audio, keyboard,
+mouse capture and display modes as the native backend. The Wasm sample mounts
+the configured disks read-only by default.
+
+Headless validation (Node.js, no browser or window):
+
+```sh
+node tests/check_wahe_wasm.mjs sheepshaver.wasm
+node tests/test_wahe_wasm.mjs sheepshaver.wasm
+node tests/test_wahe_wasm.mjs sheepshaver.wasm /path/to/ROM /path/to/Mac-HD.hfv
+```
+
+The last command boots private fixtures read-only and keeps test NVRAM in memory.
+To test with the real WAHE engine and OS_Basics file provider, use:
+
+```sh
+SHEEPSHAVER_WAHE_OUTPUT="$PWD/sheepshaver.wasm" bash tests/test_wahe_real_host.sh /path/to/ROM /path/to/Mac-HD.hfv
+```
+
+That test uses the installed Wasmtime library and writes test NVRAM under
+`build-wahe`, while keeping the disk image read-only.
 
 ## Host setup
 
@@ -144,7 +207,7 @@ also print through the host's `Print` callback, so launchers that discard comman
 replies still show the reason for a black window in their console.
 
 Guest quit and initialization failures return to the host rather than exiting
-the host process. The module's vectored exception handler handles guest ROM and
+the host process. The native module's vectored exception handler handles guest ROM and
 hardware accesses on its CPU thread and leaves faults in other host modules to
 their own handlers. It is removed during shutdown.
 

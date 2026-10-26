@@ -21,7 +21,7 @@ int main(int argc, char **argv)
     int nonblank_seen = 0, failed = 0;
 
     // Require real provider reads to boot far enough to produce a nonuniform guest image
-    for (int i = 0; i < 3000 && !nonblank_seen; ++i) {
+    for (int i = 0; i < 12000 && !nonblank_seen; ++i) {
         char *status = wahe_send_input(mac, "Status");
         if (!status || strstr(status, "failed")) {
             fprintf(stderr, "%s\n", status ? status : "Missing Status reply");
@@ -44,7 +44,9 @@ int main(int argc, char **argv)
                 failed = 1;
                 break;
             }
-            const float *pixels = (const float *)address;
+            // Resolve Wasm offsets through the host's shared memory before inspecting the image
+            const float *pixels = mac->type == WAHE_MODULE_NATIVE ? (const float *)address :
+                (const float *)(mac->memory_ptr + address);
             size_t components = bytes / sizeof(float);
             // Check the actual host receives normalized linear float components and opaque alpha
             for (size_t p = 0; p < components; ++p)

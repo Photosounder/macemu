@@ -10,7 +10,7 @@
 #include <deque>
 #include <cmath>
 
-static std::mutex frame_mutex, input_mutex;
+static WaheMutex frame_mutex, input_mutex;
 static std::vector<float> presented;
 static float monitor_to_linear[256];
 static int presented_width, presented_height;
@@ -57,7 +57,7 @@ static int adb_code(int scan)
 static void enqueue(Input event)
 {
     // Bound host input and release held state if an overloaded host loses events
-    std::lock_guard<std::mutex> lock(input_mutex);
+    std::lock_guard<WaheMutex> lock(input_mutex);
     if (input_queue.size() >= 4096) {
         input_queue.clear();
         input_queue.push_back({5, 0, 0});
@@ -96,7 +96,7 @@ void wahe_dispatch_input()
     // Apply queued ADB changes only on the CPU thread that owns the guest's input state
     std::deque<Input> events;
     {
-        std::lock_guard<std::mutex> lock(input_mutex);
+        std::lock_guard<WaheMutex> lock(input_mutex);
         events.swap(input_queue);
     }
     for (const auto &event : events) {
@@ -126,6 +126,10 @@ void wahe_dispatch_input()
 bool VideoInit()
 {
     // Reserve enough guest memory to switch between resolutions without moving the framebuffer
+#ifdef __wasm32__
+    // Allocate the guest framebuffer before translating its fixed Macintosh address
+    if (!wahe_wasm_map(video_base, video_capacity)) return false;
+#endif
     if (vm_acquire_fixed(Mac2HostAddr(video_base), video_capacity) < 0) return false;
     memset(VModes, 0, sizeof(VideoInfo) * 64);
     // Offer the common Mac resolutions and the configured startup size at every colour depth
@@ -170,7 +174,7 @@ static void capture_frame()
 {
     // Convert the guest-owned framebuffer on its CPU thread before publishing the snapshot
     const VideoInfo mode = VModes[cur_mode];
-    std::lock_guard<std::mutex> lock(frame_mutex);
+    std::lock_guard<WaheMutex> lock(frame_mutex);
     presented.resize((size_t)mode.viXsize * mode.viYsize * 4);
     const uint8 *screen = Mac2HostAddr(screen_base);
     for (int y = 0; y < mode.viYsize; ++y) for (int x = 0; x < mode.viXsize; ++x) {
@@ -204,7 +208,7 @@ static void capture_frame()
 bool wahe_frame(std::vector<float> &output, int &width, int &height)
 {
     // Copy a completed CPU snapshot so callback buffers cannot race guest screen writes
-    std::lock_guard<std::mutex> lock(frame_mutex);
+    std::lock_guard<WaheMutex> lock(frame_mutex);
     if (!frame_ready) return false;
     output = presented;
     width = presented_width;
@@ -219,7 +223,7 @@ void VideoVBL()
     if (private_data && private_data->interruptsEnabled) VSLDoInterruptService(private_data->vslServiceID);
     capture_frame();
 }
-void VideoExit() { /* Release presentation state after the CPU has stopped */ std::lock_guard<std::mutex> lock(frame_mutex); std::vector<float>().swap(presented); frame_ready = false; video_activated = false; delete private_data; private_data = nullptr; }
+void VideoExit() { /* Release presentation state after the CPU has stopped */ std::lock_guard<WaheMutex> lock(frame_mutex); std::vector<float>().swap(presented); frame_ready = false; video_activated = false; delete private_data; private_data = nullptr; }
 void VideoQuitFullScreen() { /* The SDLwindow module owns fullscreen state */ }
 void video_set_palette() { /* The next CPU snapshot uses the current Mac palette */ }
 void video_set_gamma(int) { /* Gamma tables remain owned by the common video driver */ }

@@ -3,7 +3,11 @@
 #define SHEEPSHAVER_WAHE_SYSDEPS_H
 
 #define SHEEPSHAVER_WAHE 1
+#ifdef __wasm32__
+#include "wasm/sysdeps.h"
+#else
 #include "../Windows/sysdeps.h"
+#endif
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>

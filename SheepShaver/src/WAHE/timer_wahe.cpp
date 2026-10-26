@@ -2,8 +2,10 @@
 #include "wahe_backend.h"
 #include "timer.h"
 #include "macos_util.h"
+#ifndef __wasm32__
 #include <thread>
 #include <chrono>
+#endif
 
 void timer_init() { /* Host time is initialized before starting the worker */ }
 uint64 GetTicks_usec() { /* Read the clock supplied by WAHE callbacks */ return wahe_clock_usec.load() - wahe_clock_origin; }
@@ -27,6 +29,13 @@ void Delay_usec(uint32 us)
     uint64 end = GetTicks_usec() + us;
     while (GetTicks_usec() < end) {
         wahe_check_stop();
+#ifdef __wasm32__
+        // Leave a pending delay when the CPU owner requests shutdown
+        if (wahe_stop_requested()) return;
+        // Yield through the host while the interpreter supplies updated timer ticks
+        wahe_wasm_sleep(1000);
+#else
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
+#endif
     }
 }
