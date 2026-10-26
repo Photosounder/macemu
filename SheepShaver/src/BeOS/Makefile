@@ -30,13 +30,13 @@ TYPE= APP
 #	if two source files with the same name (source.c or source.cpp)
 #	are included from different directories.  Also note that spaces
 #	in folder names do not work well with this makefile.
-SRCS= ../main.cpp main_beos.cpp ../prefs.cpp ../prefs_items.cpp prefs_beos.cpp \
-    prefs_editor_beos.cpp sys_beos.cpp ../rom_patches.cpp ../rsrc_patches.cpp \
-    ../emul_op.cpp ../name_registry.cpp ../macos_util.cpp ../timer.cpp \
-    timer_beos.cpp ../xpram.cpp xpram_beos.cpp ../adb.cpp clip_beos.cpp \
-    ../sony.cpp ../disk.cpp ../cdrom.cpp ../scsi.cpp scsi_beos.cpp \
-    ../video.cpp video_beos.cpp ../audio.cpp audio_beos.cpp ../ether.cpp \
-    ether_beos.cpp ../serial.cpp serial_beos.cpp ../extfs.cpp extfs_beos.cpp \
+SRCS= ../main.cpp main_beos.cpp ../../../shared/prefs.cpp ../prefs_items.cpp prefs_beos.cpp \
+    prefs_editor_beos.cpp ../../../shared/BeOS/sys_beos.cpp ../rom_patches.cpp ../rsrc_patches.cpp \
+    ../emul_op.cpp ../name_registry.cpp ../macos_util.cpp ../../../shared/timer.cpp \
+    ../../../shared/BeOS/timer_beos.cpp ../../../shared/xpram.cpp ../../../shared/BeOS/xpram_beos.cpp ../../../shared/adb.cpp clip_beos.cpp \
+    ../../../shared/sony.cpp ../../../shared/disk.cpp ../../../shared/cdrom.cpp ../../../shared/scsi.cpp ../../../shared/BeOS/scsi_beos.cpp \
+    ../video.cpp video_beos.cpp ../../../shared/audio.cpp ../../../shared/BeOS/audio_beos.cpp ../ether.cpp \
+    ether_beos.cpp ../serial.cpp ../../../shared/BeOS/serial_beos.cpp ../../../shared/extfs.cpp ../../../shared/BeOS/extfs_beos.cpp \
     about_window_beos.cpp ../user_strings.cpp user_strings_beos.cpp ../thunks.cpp
 
 #	specify the resource files to use
@@ -76,7 +76,7 @@ SYSTEM_INCLUDE_PATHS =
 #	additional paths to look for local headers
 #	thes use the form: #include "header"
 #	source file directories are automatically included
-LOCAL_INCLUDE_PATHS = ../include SheepDriver SheepNet
+LOCAL_INCLUDE_PATHS = ../include ../../../shared/BeOS/SheepDriver ../../../shared/BeOS/SheepNet ../../../shared/include ../../../shared/BeOS
 
 #	specify the level of optimization that you desire
 #	NONE, SOME, FULL

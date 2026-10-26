@@ -508,6 +508,11 @@ void powerpc_registers::interrupt_copy(powerpc_registers &oregs, powerpc_registe
 
 bool powerpc_cpu::check_spcflags()
 {
+#ifdef SHEEPSHAVER_WAHE
+	// Unwind nested emulation calls cooperatively when the embedding host stops the module
+	extern void wahe_check_stop();
+	wahe_check_stop();
+#endif
 	if (spcflags().test(SPCFLAG_CPU_EXEC_RETURN)) {
 		spcflags().clear(SPCFLAG_CPU_EXEC_RETURN);
 		return false;

@@ -25,7 +25,7 @@
 #define X86_FLAT_REGISTERS		0
 #define X86_OPTIMIZE_ALU		1
 #define X86_OPTIMIZE_ROTSHI		1
-#include "cpu/jit/x86/codegen_x86.h"
+#include "codegen_x86.h"
 
 #if defined(__GNUC__)
 #define x86_emit_failure(MSG)	gen_failure(MSG, __FILE__, __LINE__, __FUNCTION__)

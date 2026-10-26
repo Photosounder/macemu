@@ -56,10 +56,10 @@
 		08B5FB201024FE320047FD1B /* AppController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppController.h; sourceTree = "<group>"; };
 		08B5FB211024FE320047FD1B /* AppController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppController.mm; sourceTree = "<group>"; };
 		08DC90BC0B67074C00799A45 /* prefs_items.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = prefs_items.cpp; path = ../../prefs_items.cpp; sourceTree = SOURCE_ROOT; };
-		08DC90BE0B67075D00799A45 /* prefs_unix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = prefs_unix.cpp; path = ../../Unix/prefs_unix.cpp; sourceTree = SOURCE_ROOT; };
-		08DC90C00B67077300799A45 /* prefs.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = prefs.cpp; path = ../../prefs.cpp; sourceTree = SOURCE_ROOT; };
-		08DC90C20B67078300799A45 /* prefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = prefs.h; path = ../../include/prefs.h; sourceTree = SOURCE_ROOT; };
-		08DC90C40B67079800799A45 /* sys.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sys.h; path = ../../include/sys.h; sourceTree = SOURCE_ROOT; };
+		08DC90BE0B67075D00799A45 /* prefs_unix.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = prefs_unix.cpp; path = ../../../../shared/Unix/prefs_unix.cpp; sourceTree = SOURCE_ROOT; };
+		08DC90C00B67077300799A45 /* prefs.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = prefs.cpp; path = ../../../../shared/prefs.cpp; sourceTree = SOURCE_ROOT; };
+		08DC90C20B67078300799A45 /* prefs.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = prefs.h; path = ../../../../shared/include/prefs.h; sourceTree = SOURCE_ROOT; };
+		08DC90C40B67079800799A45 /* sys.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sys.h; path = ../../../../shared/include/sys.h; sourceTree = SOURCE_ROOT; };
 		08DC90C50B6707AC00799A45 /* user_strings_unix.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = user_strings_unix.h; path = ../../Unix/user_strings_unix.h; sourceTree = SOURCE_ROOT; };
 		08DC90C70B6707BE00799A45 /* sysdeps.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sysdeps.h; path = ../../Unix/sysdeps.h; sourceTree = SOURCE_ROOT; };
 		08F4D172102601C500C6436D /* VMListController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VMListController.h; sourceTree = "<group>"; };
@@ -303,6 +303,7 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../../include", "$(SRCROOT)/../../../../shared/include");
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
@@ -328,6 +329,7 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../../include", "$(SRCROOT)/../../../../shared/include");
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
@@ -355,6 +357,7 @@
 		C01FCF4F08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../../include", "$(SRCROOT)/../../../../shared/include");
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -390,6 +393,7 @@
 		C01FCF5008A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				HEADER_SEARCH_PATHS = ("$(inherited)", "$(SRCROOT)/../../include", "$(SRCROOT)/../../../../shared/include");
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;

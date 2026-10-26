@@ -11,7 +11,7 @@ datadir = @datadir@
 mandir = @mandir@
 man1dir = $(mandir)/man1
 
-KEYCODES = ../SDL/keycodes
+KEYCODES = ../../../shared/SDL/keycodes
 
 DESTDIR =
 
@@ -23,23 +23,22 @@ GTK_LIBS = @GTK_LIBS@
 
 SLIRP_CFLAGS = @SLIRP_CFLAGS@
 SLIRP_SRCS = \
-    ../slirp/bootp.c     ../slirp/ip_output.c  ../slirp/tcp_input.c  \
-    ../slirp/cksum.c     ../slirp/mbuf.c       ../slirp/tcp_output.c \
-    ../slirp/debug.c     ../slirp/misc.c       ../slirp/tcp_subr.c   \
-    ../slirp/if.c        ../slirp/sbuf.c       ../slirp/tcp_timer.c  \
-    ../slirp/ip_icmp.c   ../slirp/slirp.c      ../slirp/tftp.c       \
-    ../slirp/ip_input.c  ../slirp/socket.c     ../slirp/udp.c
-SLIRP_OBJS = $(SLIRP_SRCS:../slirp/%.c=$(OBJ_DIR)/slirp-%.o)
+    ../../../shared/slirp/bootp.c     ../../../shared/slirp/ip_output.c  ../../../shared/slirp/tcp_input.c  \
+    ../../../shared/slirp/cksum.c     ../../../shared/slirp/mbuf.c       ../../../shared/slirp/tcp_output.c \
+    ../../../shared/slirp/debug.c     ../../../shared/slirp/misc.c       ../../../shared/slirp/tcp_subr.c   \
+    ../../../shared/slirp/if.c        ../../../shared/slirp/sbuf.c       ../../../shared/slirp/tcp_timer.c  \
+    ../../../shared/slirp/ip_icmp.c   ../../../shared/slirp/slirp.c      ../../../shared/slirp/tftp.c       \
+    ../../../shared/slirp/ip_input.c  ../../../shared/slirp/socket.c     ../../../shared/slirp/udp.c
+SLIRP_OBJS = $(SLIRP_SRCS:../../../shared/slirp/%.c=$(OBJ_DIR)/slirp-%.o)
 
 USE_BINCUE = @USE_BINCUE@
 
-LN_S = @LN_S@
 WINDRES = @WINDRES@
 CC = @CC@
 CXX = @CXX@
 CFLAGS = @CFLAGS@ $(SDL_CFLAGS)
 CXXFLAGS = @CXXFLAGS@ $(SDL_CFLAGS)
-CPPFLAGS = @CPPFLAGS@ -I../include -I. -I../CrossPlatform @CPUINCLUDES@ -I../slirp
+CPPFLAGS = @CPPFLAGS@ -I../include -I../../../shared/include -I. -I../CrossPlatform @CPUINCLUDES@ -I../../../shared/slirp -I../../../shared/CrossPlatform -I../../../shared/Windows -I../../../shared/uae_cpu/compiler
 DEFS = @DEFS@ @DEFINES@
 LDFLAGS = @LDFLAGS@ -Wl,-Bstatic
 LIBS = @LIBS@ -lws2_32 -lwsock32 -liphlpapi
@@ -53,30 +52,29 @@ HOST_CXXFLAGS = -O2
 HOST_LDFLAGS =
 
 ## Files
-XPLATSRCS = vm_alloc.cpp vm_alloc.h sigsegv.cpp sigsegv.h video_vosf.h video_blit.cpp video_blit.h
 
-CDENABLESRCS = cdenable/cache.cpp cdenable/eject_nt.cpp cdenable/ntcd.cpp
+CDENABLESRCS = ../../../shared/Windows/cdenable/cache.cpp ../../../shared/Windows/cdenable/eject_nt.cpp ../../../shared/Windows/cdenable/ntcd.cpp
 
-ROUTERSRCS =  router/arp.cpp router/dump.cpp router/dynsockets.cpp router/ftp.cpp \
-	router/icmp.cpp router/mib/interfaces.cpp router/iphelp.cpp router/ipsocket.cpp \
-	router/mib/mibaccess.cpp router/router.cpp router/tcp.cpp router/udp.cpp b2ether/packet32.cpp
+ROUTERSRCS =  ../../../shared/Windows/router/arp.cpp ../../../shared/Windows/router/dump.cpp ../../../shared/Windows/router/dynsockets.cpp ../../../shared/Windows/router/ftp.cpp \
+	../../../shared/Windows/router/icmp.cpp ../../../shared/Windows/router/mib/interfaces.cpp ../../../shared/Windows/router/iphelp.cpp ../../../shared/Windows/router/ipsocket.cpp \
+	../../../shared/Windows/router/mib/mibaccess.cpp ../../../shared/Windows/router/router.cpp ../../../shared/Windows/router/tcp.cpp ../../../shared/Windows/router/udp.cpp ../../../shared/Windows/b2ether/packet32.cpp
 
-SRCS = ../main.cpp main_windows.cpp ../prefs.cpp ../prefs_items.cpp prefs_windows.cpp \
-    sys_windows.cpp ../rom_patches.cpp ../slot_rom.cpp ../rsrc_patches.cpp \
-    ../emul_op.cpp ../macos_util.cpp ../xpram.cpp xpram_windows.cpp ../timer.cpp \
-    timer_windows.cpp ../adb.cpp ../serial.cpp serial_windows.cpp \
-    ../ether.cpp ether_windows.cpp ../sony.cpp ../disk.cpp ../cdrom.cpp \
-    ../scsi.cpp ../dummy/scsi_dummy.cpp ../video.cpp \
-    ../SDL/video_sdl.cpp ../SDL/video_sdl2.cpp ../SDL/video_sdl3.cpp \
-    video_blit.cpp ../audio.cpp ../SDL/audio_sdl.cpp ../SDL/audio_sdl3.cpp clip_windows.cpp \
-	../extfs.cpp extfs_windows.cpp ../user_strings.cpp user_strings_windows.cpp \
-    vm_alloc.cpp sigsegv.cpp posix_emu.cpp util_windows.cpp \
-    ../dummy/prefs_editor_dummy.cpp BasiliskII.rc \
+SRCS = ../main.cpp main_windows.cpp ../../../shared/prefs.cpp ../prefs_items.cpp prefs_windows.cpp \
+    ../../../shared/Windows/sys_windows.cpp ../rom_patches.cpp ../slot_rom.cpp ../rsrc_patches.cpp \
+    ../emul_op.cpp ../macos_util.cpp ../../../shared/xpram.cpp ../../../shared/Windows/xpram_windows.cpp ../../../shared/timer.cpp \
+    ../../../shared/Windows/timer_windows.cpp ../../../shared/adb.cpp ../serial.cpp ../../../shared/Windows/serial_windows.cpp \
+    ../ether.cpp ../../../shared/Windows/ether_windows.cpp ../../../shared/sony.cpp ../../../shared/disk.cpp ../../../shared/cdrom.cpp \
+    ../../../shared/scsi.cpp ../../../shared/dummy/scsi_dummy.cpp ../video.cpp \
+    ../../../shared/SDL/video_sdl.cpp ../../../shared/SDL/video_sdl2.cpp ../../../shared/SDL/video_sdl3.cpp \
+    ../../../shared/CrossPlatform/video_blit.cpp ../../../shared/audio.cpp ../../../shared/SDL/audio_sdl.cpp ../../../shared/SDL/audio_sdl3.cpp ../../../shared/Windows/clip_windows.cpp \
+	../../../shared/extfs.cpp ../../../shared/Windows/extfs_windows.cpp ../user_strings.cpp user_strings_windows.cpp \
+    ../../../shared/CrossPlatform/vm_alloc.cpp ../CrossPlatform/sigsegv.cpp ../../../shared/Windows/posix_emu.cpp ../../../shared/Windows/util_windows.cpp \
+    ../../../shared/dummy/prefs_editor_dummy.cpp BasiliskII.rc \
     $(CDENABLESRCS) $(ROUTERSRCS) $(CPUSRCS) $(EXTRASRCS) $(SLIRP_OBJS)
 
-UI_SRCS = ../prefs.cpp prefs_windows.cpp prefs_editor_gtk.cpp xpram_windows.cpp \
-	../prefs_items.cpp ../user_strings.cpp user_strings_windows.cpp util_windows.cpp \
-	b2ether/Packet32.cpp BasiliskIIGUI.rc
+UI_SRCS = ../../../shared/prefs.cpp prefs_windows.cpp ../../../shared/Windows/prefs_editor_gtk.cpp ../../../shared/Windows/xpram_windows.cpp \
+	../prefs_items.cpp ../user_strings.cpp user_strings_windows.cpp ../../../shared/Windows/util_windows.cpp \
+	../../../shared/Windows/b2ether/Packet32.cpp BasiliskIIGUI.rc
 
 UI_APP = BasiliskIIGUI.exe
 
@@ -95,8 +93,6 @@ endif
 
 all: $(PROGS)
 
-$(XPLATSRCS): %: ../CrossPlatform/%
-	$(LN_S) $< $@
 
 OBJ_DIR = obj
 $(OBJ_DIR)::
@@ -118,17 +114,16 @@ SRC_PATHS += $(sort $(foreach file, $(SRCS), $(dir $(file))))
 VPATH :=
 VPATH += $(addprefix :, $(subst  ,:, $(filter-out $($(subst, :, ,$(VPATH))), $(SRC_PATHS))))
 
-$(APP): $(XPLATSRCS) $(OBJ_DIR) $(OBJS)
+$(APP): $(OBJ_DIR) $(OBJS)
 	$(CXX) -o $@ $(LDFLAGS) $(OBJS) $(LIBS) $(SDL_LIBS)
 
-$(UI_APP): $(XPLATSRCS) $(OBJ_DIR) $(UI_OBJS)
+$(UI_APP): $(OBJ_DIR) $(UI_OBJS)
 	$(CXX) -o $@ $(LDFLAGS) $(UI_OBJS) $(LIBS) -Wl,-Bdynamic $(GTK_LIBS) -Wl,-Bstatic -mwindows -static-libgcc
 
 mostlyclean:
 	rm -f $(APP) $(UI_APP) $(OBJ_DIR)/* core* *.core *~ *.bak
 
 clean: mostlyclean
-	rm -f $(XPLATSRCS)
 	rm -f cpuemu.cpp cpudefs.cpp cputmp*.s cpufast*.s cpustbl.cpp cputbl.h compemu.cpp compstbl.cpp comptbl.h
 
 distclean: clean
@@ -146,7 +141,7 @@ $(OBJ_DIR)/%.ho : %.c
 	$(HOST_CC) $(CPPFLAGS) $(DEFS) $(HOST_CFLAGS) -c $< -o $@
 $(OBJ_DIR)/%.ho : %.cpp
 	$(HOST_CXX) $(CPPFLAGS) $(DEFS) $(HOST_CXXFLAGS) -c $< -o $@
-$(OBJ_DIR)/slirp-%.o : ../slirp/%.c
+$(OBJ_DIR)/slirp-%.o : ../../../shared/slirp/%.c
 	$(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) $(SLIRP_CFLAGS) -c $< -o $@
 $(OBJ_DIR)/%.o : %.c
 	$(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c $< -o $@
@@ -154,7 +149,7 @@ $(OBJ_DIR)/%.o : %.cpp
 	$(CXX) $(CPPFLAGS) $(DEFS) $(CXXFLAGS) -c $< -o $@
 $(OBJ_DIR)/%.o : %.s
 	$(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c $< -o $@
-$(OBJ_DIR)/prefs_editor_gtk.o: prefs_editor_gtk.cpp
+$(OBJ_DIR)/prefs_editor_gtk.o: ../../../shared/Windows/prefs_editor_gtk.cpp
 	$(CXX) -O2 -mms-bitfields $(CPPFLAGS) $(DEFS) $(GTK_CFLAGS) -c $< -o $@
 
 # Windows resources

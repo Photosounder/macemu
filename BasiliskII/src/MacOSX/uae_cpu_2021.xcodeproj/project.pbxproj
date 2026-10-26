@@ -369,6 +369,11 @@
 					"USE_XCODE=1",
 				);
 				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../shared/include",
+					"$(SRCROOT)/../../../shared/CrossPlatform",
+					"$(SRCROOT)/../../../shared/MacOSX",
+					"$(SRCROOT)/../../../shared/Unix",
+					"$(SRCROOT)/../../../shared/uae_cpu/compiler",
 					/usr/local/include,
 					../CrossPlatform,
 					../include,
@@ -389,6 +394,11 @@
 				EXECUTABLE_PREFIX = lib;
 				GCC_PREPROCESSOR_DEFINITIONS = "USE_XCODE=1";
 				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../shared/include",
+					"$(SRCROOT)/../../../shared/CrossPlatform",
+					"$(SRCROOT)/../../../shared/MacOSX",
+					"$(SRCROOT)/../../../shared/Unix",
+					"$(SRCROOT)/../../../shared/uae_cpu/compiler",
 					/usr/local/include,
 					../CrossPlatform,
 					../include,

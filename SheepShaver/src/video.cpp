@@ -35,6 +35,9 @@
 #include "user_strings.h"
 #include "version.h"
 #include "thunks.h"
+#ifdef SHEEPSHAVER_WAHE
+#include "wahe_backend.h"
+#endif
 
 #define DEBUG 0
 #include "debug.h"
@@ -218,6 +221,10 @@ static bool allocate_gamma_table(VidLocals *csSave, uint32 size)
 
 static int16 set_gamma(VidLocals *csSave, uint32 gamma)
 {
+#ifdef SHEEPSHAVER_WAHE
+	// Replace every guest correction request with the driver's identity table when configured
+	if (wahe_force_identity_gamma) gamma = 0;
+#endif
 	if (gamma == 0) { // Build linear ramp, 256 entries
 
 		// Allocate new table, if necessary
@@ -828,6 +835,12 @@ static int16 VideoStatus(uint32 pb, VidLocals *csSave)
 					WriteMacInt32(param + csVerticalLines, 768);
 					WriteMacInt32(param + csRefreshRate, 75<<16);
 					break;
+				// Report the standard Apple 16-inch resolution to Display Manager
+				case APPLE_832x624:
+					WriteMacInt32(param + csHorizontalPixels, 832);
+					WriteMacInt32(param + csVerticalLines, 624);
+					WriteMacInt32(param + csRefreshRate, 75<<16);
+					break;
 				case APPLE_1152x768:
 					WriteMacInt32(param + csHorizontalPixels, 1152);
 					WriteMacInt32(param + csVerticalLines, 768);
@@ -959,6 +972,11 @@ static int16 VideoStatus(uint32 pb, VidLocals *csSave)
 							break;
 						case APPLE_1024x768:
 							timing = timingVESA_1024x768_75hz;
+							break;
+						// Advertise the Apple 16-inch timing as a safe selectable mode
+						case APPLE_832x624:
+							timing = timingApple_832x624_75hz;
+							flags |= (1<<kModeSafe);
 							break;
 						case APPLE_1152x768:
 							timing = timingApple_1152x870_75hz; // FIXME

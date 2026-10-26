@@ -84,7 +84,7 @@ static int verbose = 2;
 #define X86_OPTIMIZE_ALU	1
 #define X86_OPTIMIZE_ROTSHI	1
 #define X86_RIP_RELATIVE_ADDR	0
-#include "compiler/codegen_x86.h"
+#include "codegen_x86.h"
 
 #if X86_TARGET_64BIT
 #define X86_MAX_ALU_REGS	16

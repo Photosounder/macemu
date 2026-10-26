@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\adb.cpp">
+    <ClCompile Include="..\..\..\shared\adb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\audio.cpp">
+    <ClCompile Include="..\..\..\shared\audio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\cdrom.cpp">
+    <ClCompile Include="..\..\..\shared\cdrom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\disk.cpp">
+    <ClCompile Include="..\..\..\shared\disk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\emul_op.cpp">
@@ -33,7 +33,7 @@
     <ClCompile Include="..\ether.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\extfs.cpp">
+    <ClCompile Include="..\..\..\shared\extfs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\macos_util.cpp">
@@ -42,7 +42,7 @@
     <ClCompile Include="..\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\prefs.cpp">
+    <ClCompile Include="..\..\..\shared\prefs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\prefs_items.cpp">
@@ -54,7 +54,7 @@
     <ClCompile Include="..\rsrc_patches.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\scsi.cpp">
+    <ClCompile Include="..\..\..\shared\scsi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\serial.cpp">
@@ -63,10 +63,10 @@
     <ClCompile Include="..\slot_rom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\sony.cpp">
+    <ClCompile Include="..\..\..\shared\sony.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\timer.cpp">
+    <ClCompile Include="..\..\..\shared\timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\user_strings.cpp">
@@ -75,88 +75,88 @@
     <ClCompile Include="..\video.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\xpram.cpp">
+    <ClCompile Include="..\..\..\shared\xpram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="clip_windows.cpp">
+    <ClCompile Include="../../../shared/Windows/clip_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ether_windows.cpp">
+    <ClCompile Include="../../../shared/Windows/ether_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="extfs_windows.cpp">
+    <ClCompile Include="../../../shared/Windows/extfs_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="posix_emu.cpp">
+    <ClCompile Include="../../../shared/Windows/posix_emu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="prefs_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="serial_windows.cpp">
+    <ClCompile Include="../../../shared/Windows/serial_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sys_windows.cpp">
+    <ClCompile Include="../../../shared/Windows/sys_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="timer_windows.cpp">
+    <ClCompile Include="../../../shared/Windows/timer_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="user_strings_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="util_windows.cpp">
+    <ClCompile Include="../../../shared/Windows/util_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xpram_windows.cpp">
+    <ClCompile Include="../../../shared/Windows/xpram_windows.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cdenable\cache.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\cdenable\cache.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cdenable\eject_nt.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\cdenable\eject_nt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cdenable\ntcd.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\cdenable\ntcd.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\arp.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\arp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\dump.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\dump.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\dynsockets.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\dynsockets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\ftp.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\ftp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\icmp.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\icmp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\iphelp.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\iphelp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\ipsocket.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\ipsocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\router.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\router.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\tcp.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\tcp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\udp.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\udp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\mib\interfaces.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\mib\interfaces.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="router\mib\mibaccess.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\router\mib\mibaccess.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\uae_cpu\basilisk_glue.cpp">
@@ -177,58 +177,58 @@
     <ClCompile Include="..\uae_cpu\compiler\compemu_support.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\bootp.c">
+    <ClCompile Include="..\..\..\shared\slirp\bootp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\cksum.c">
+    <ClCompile Include="..\..\..\shared\slirp\cksum.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\debug.c">
+    <ClCompile Include="..\..\..\shared\slirp\debug.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\if.c">
+    <ClCompile Include="..\..\..\shared\slirp\if.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\ip_icmp.c">
+    <ClCompile Include="..\..\..\shared\slirp\ip_icmp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\ip_input.c">
+    <ClCompile Include="..\..\..\shared\slirp\ip_input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\ip_output.c">
+    <ClCompile Include="..\..\..\shared\slirp\ip_output.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\mbuf.c">
+    <ClCompile Include="..\..\..\shared\slirp\mbuf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\misc.c">
+    <ClCompile Include="..\..\..\shared\slirp\misc.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\sbuf.c">
+    <ClCompile Include="..\..\..\shared\slirp\sbuf.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\slirp.c">
+    <ClCompile Include="..\..\..\shared\slirp\slirp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\socket.c">
+    <ClCompile Include="..\..\..\shared\slirp\socket.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\tcp_input.c">
+    <ClCompile Include="..\..\..\shared\slirp\tcp_input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\tcp_output.c">
+    <ClCompile Include="..\..\..\shared\slirp\tcp_output.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\tcp_subr.c">
+    <ClCompile Include="..\..\..\shared\slirp\tcp_subr.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\tcp_timer.c">
+    <ClCompile Include="..\..\..\shared\slirp\tcp_timer.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\tftp.c">
+    <ClCompile Include="..\..\..\shared\slirp\tftp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\slirp\udp.c">
+    <ClCompile Include="..\..\..\shared\slirp\udp.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\uae_cpu\compemu.cpp">
@@ -252,31 +252,31 @@
     <ClCompile Include="..\uae_cpu\cpuemu_nf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="b2ether\packet32.cpp">
+    <ClCompile Include="..\..\..\shared\Windows\b2ether\packet32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\CrossPlatform\sigsegv.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CrossPlatform\video_blit.cpp">
+    <ClCompile Include="..\..\..\shared\CrossPlatform\video_blit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CrossPlatform\vm_alloc.cpp">
+    <ClCompile Include="..\..\..\shared\CrossPlatform\vm_alloc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SDL\audio_sdl.cpp">
+    <ClCompile Include="..\..\..\shared\SDL\audio_sdl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SDL\video_sdl.cpp">
+    <ClCompile Include="..\..\..\shared\SDL\video_sdl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\SDL\video_sdl2.cpp">
+    <ClCompile Include="..\..\..\shared\SDL\video_sdl2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\dummy\scsi_dummy.cpp">
+    <ClCompile Include="..\..\..\shared\dummy\scsi_dummy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\dummy\prefs_editor_dummy.cpp">
+    <ClCompile Include="..\..\..\shared\dummy\prefs_editor_dummy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\uae_cpu\compiler\codegen_x86.cpp">
@@ -294,70 +294,70 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ether_windows.h">
+    <ClInclude Include="../../../shared/Windows/ether_windows.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="kernel_windows.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="posix_emu.h">
+    <ClInclude Include="../../../shared/Windows/posix_emu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="user_strings_windows.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="util_windows.h">
+    <ClInclude Include="../../../shared/Windows/util_windows.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cdenable\cache.h">
+    <ClInclude Include="..\..\..\shared\Windows\cdenable\cache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cdenable\cdenable.h">
+    <ClInclude Include="..\..\..\shared\Windows\cdenable\cdenable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cdenable\eject_nt.h">
+    <ClInclude Include="..\..\..\shared\Windows\cdenable\eject_nt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cdenable\ntcd.h">
+    <ClInclude Include="..\..\..\shared\Windows\cdenable\ntcd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\arp.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\arp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\dump.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\dump.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\dynsockets.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\dynsockets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\ftp.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\ftp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\icmp.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\icmp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\iphelp.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\iphelp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\ipsocket.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\ipsocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\router.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\router.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\router_types.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\router_types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\tcp.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\tcp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\udp.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\udp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\mib\interfaces.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\mib\interfaces.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="router\mib\mibaccess.h">
+    <ClInclude Include="..\..\..\shared\Windows\router\mib\mibaccess.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\uae_cpu\memory.h">
@@ -378,67 +378,67 @@
     <ClInclude Include="..\uae_cpu\compiler\compemu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\bootp.h">
+    <ClInclude Include="..\..\..\shared\slirp\bootp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\ctl.h">
+    <ClInclude Include="..\..\..\shared\slirp\ctl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\debug.h">
+    <ClInclude Include="..\..\..\shared\slirp\debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\icmp_var.h">
+    <ClInclude Include="..\..\..\shared\slirp\icmp_var.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\if.h">
+    <ClInclude Include="..\..\..\shared\slirp\if.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\ip.h">
+    <ClInclude Include="..\..\..\shared\slirp\ip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\ip_icmp.h">
+    <ClInclude Include="..\..\..\shared\slirp\ip_icmp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\libslirp.h">
+    <ClInclude Include="..\..\..\shared\slirp\libslirp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\main.h">
+    <ClInclude Include="..\..\..\shared\slirp\main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\mbuf.h">
+    <ClInclude Include="..\..\..\shared\slirp\mbuf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\misc.h">
+    <ClInclude Include="..\..\..\shared\slirp\misc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\sbuf.h">
+    <ClInclude Include="..\..\..\shared\slirp\sbuf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\slirp.h">
+    <ClInclude Include="..\..\..\shared\slirp\slirp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\slirp_config.h">
+    <ClInclude Include="..\..\..\shared\slirp\slirp_config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\socket.h">
+    <ClInclude Include="..\..\..\shared\slirp\socket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\tcp.h">
+    <ClInclude Include="..\..\..\shared\slirp\tcp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\tcp_timer.h">
+    <ClInclude Include="..\..\..\shared\slirp\tcp_timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\tcp_var.h">
+    <ClInclude Include="..\..\..\shared\slirp\tcp_var.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\tcpip.h">
+    <ClInclude Include="..\..\..\shared\slirp\tcpip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\tftp.h">
+    <ClInclude Include="..\..\..\shared\slirp\tftp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\slirp\udp.h">
+    <ClInclude Include="..\..\..\shared\slirp\udp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="config.h">
@@ -456,25 +456,25 @@
     <ClInclude Include="..\uae_cpu\noflags.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\adb.h">
+    <ClInclude Include="..\..\..\shared\include\adb.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\audio.h">
+    <ClInclude Include="..\..\..\shared\include\audio.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\audio_defs.h">
+    <ClInclude Include="..\..\..\shared\include\audio_defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\cdrom.h">
+    <ClInclude Include="..\..\..\shared\include\cdrom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\clip.h">
+    <ClInclude Include="..\..\..\shared\include\clip.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\debug.h">
+    <ClInclude Include="..\..\..\shared\include\debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\disk.h">
+    <ClInclude Include="..\..\..\shared\include\disk.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\emul_op.h">
@@ -486,10 +486,10 @@
     <ClInclude Include="..\include\ether_defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\extfs.h">
+    <ClInclude Include="..\..\..\shared\include\extfs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\extfs_defs.h">
+    <ClInclude Include="..\..\..\shared\include\extfs_defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\macos_util.h">
@@ -498,13 +498,13 @@
     <ClInclude Include="..\include\main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\pict.h">
+    <ClInclude Include="..\..\..\shared\include\pict.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\prefs.h">
+    <ClInclude Include="..\..\..\shared\include\prefs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\prefs_editor.h">
+    <ClInclude Include="..\..\..\shared\include\prefs_editor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\rom_patches.h">
@@ -513,25 +513,25 @@
     <ClInclude Include="..\include\rsrc_patches.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\scsi.h">
+    <ClInclude Include="..\..\..\shared\include\scsi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\serial.h">
+    <ClInclude Include="..\..\..\shared\include\serial.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\serial_defs.h">
+    <ClInclude Include="..\..\..\shared\include\serial_defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\slot_rom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\sony.h">
+    <ClInclude Include="..\..\..\shared\include\sony.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\sys.h">
+    <ClInclude Include="..\..\..\shared\include\sys.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\timer.h">
+    <ClInclude Include="..\..\..\shared\include\timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\include\user_strings.h">
@@ -546,10 +546,10 @@
     <ClInclude Include="..\include\video_defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\include\xpram.h">
+    <ClInclude Include="..\..\..\shared\include\xpram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cd_defs.h">
+    <ClInclude Include="../../../shared/Windows/cd_defs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\uae_cpu\m68k.h">
@@ -564,28 +564,28 @@
     <ClInclude Include="..\uae_cpu\fpu\types.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="b2ether\multiopt.h">
+    <ClInclude Include="..\..\..\shared\Windows\b2ether\multiopt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="b2ether\inc\b2ether_hl.h">
+    <ClInclude Include="..\..\..\shared\Windows\b2ether\inc\b2ether_hl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="b2ether\inc\ntddpack.h">
+    <ClInclude Include="..\..\..\shared\Windows\b2ether\inc\ntddpack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CrossPlatform\sigsegv.h">
+    <ClInclude Include="..\..\..\shared\CrossPlatform\sigsegv.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CrossPlatform\video_blit.h">
+    <ClInclude Include="..\..\..\shared\CrossPlatform\video_blit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CrossPlatform\video_vosf.h">
+    <ClInclude Include="..\..\..\shared\CrossPlatform\video_vosf.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CrossPlatform\vm_alloc.h">
+    <ClInclude Include="..\..\..\shared\CrossPlatform\vm_alloc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\uae_cpu\compiler\codegen_x86.h">
+    <ClInclude Include="..\..\..\shared\uae_cpu\compiler\codegen_x86.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,20 @@
 # Basilisk II and SheepShaver
 
+## Shared source layout
+
+Code used by both emulators lives in [`shared/`](shared/README.md). Both builds
+reference it directly; source links and the `make links` setup step are no longer
+needed. Keep the emulator directories and `shared/` together when building.
+After updating an existing checkout, rerun `autogen.sh` and rebuild from clean
+objects. WAHE builds use `bash build_wahe.sh` as before.
+
+## Native WAHE module
+
+SheepShaver can also be built as a Windows x86-64 WAHE module with callback-based
+I/O and SDLwindow presentation and input. Run `bash build_wahe.sh` in
+`SheepShaver`; see the [WAHE build and host integration guide](SheepShaver/WAHE.md)
+for the callback protocol, sample archive, supported devices, and headless tests.
+
 ### Clankerslop changes by me, Michel Rouzic
 
 - **Merged the two incompatible upstream codebases.** Reconciled the [kanjitalk755/macemu](https://github.com/kanjitalk755/macemu) fork with the latest [cebix/macemu master](https://github.com/cebix/macemu/tree/master), merging the 31 outstanding commits. Resolved conflicts while preserving the fork's existing ARM64, GTK, memory-management, and macOS build configuration, and incorporated the upstream GNU configuration scripts.
@@ -116,9 +131,7 @@ preparation: same as BasiliskII
   
 build (from a mingw32.exe prompt):
 ```
-$ cd macemu/SheepShaver
-$ make links
-$ cd src/Windows
+$ cd macemu/SheepShaver/src/Windows
 $ ../Unix/autogen.sh
 $ make
 ```

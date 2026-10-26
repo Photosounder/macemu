@@ -3,9 +3,12 @@ dnl Written in 2002 by Christian Bauer
 
 AC_INIT([SheepShaver], 2.3, [Christian.Bauer@uni-mainz.de], SheepShaver)
 AC_CONFIG_SRCDIR(main_windows.cpp)
-AC_CONFIG_AUX_DIR(../Unix)
+AC_CONFIG_AUX_DIR([../../../shared/Unix])
 AC_PREREQ(2.52)
 AC_CONFIG_HEADER(config.h)
+
+dnl Make shared exception headers available to configure-time compilation tests.
+CPPFLAGS="$CPPFLAGS -I$srcdir/../../../shared/CrossPlatform"
 
 dnl Canonical system information.
 AC_CANONICAL_HOST
@@ -26,7 +29,6 @@ AC_PROG_CPP
 AC_PROG_CXX
 AC_PROG_MAKE_SET
 AC_PROG_EGREP
-AC_PROG_LN_S
 AC_PATH_PROG(PERL, [perl])
 AC_CHECK_TOOL(WINDRES, windres)
 
@@ -89,7 +91,7 @@ AC_CACHE_CHECK([whether VirtualProtect works],
       #define HAVE_WIN32_VM 1
       #define CONFIGURE_TEST_VM_MAP
       #define TEST_VM_PROT_$test_def
-      #include "../CrossPlatform/vm_alloc.cpp"
+      #include "../../../shared/CrossPlatform/vm_alloc.cpp"
     ], ac_cv_VirtualProtect_works=no, rm -f core,
     dnl When cross-compiling, assume it works
     ac_cv_VirtualProtect_works="yes"
@@ -99,7 +101,7 @@ AC_CACHE_CHECK([whether VirtualProtect works],
     #define HAVE_WIN32_VM 1
     #define CONFIGURE_TEST_VM_MAP
     #define TEST_VM_PROT_RDWR_WRITE
-    #include "../CrossPlatform/vm_alloc.cpp"
+    #include "../../../shared/CrossPlatform/vm_alloc.cpp"
   ], , ac_cv_VirtualProtect_works=no,
   dnl When cross-compiling, assume it works
   ac_cv_VirtualProtect_works="yes"
@@ -121,7 +123,7 @@ AC_CACHE_CHECK([whether your system supports Windows exceptions],
   AC_TRY_RUN([
     #define HAVE_WIN32_EXCEPTIONS 1
     #define CONFIGURE_TEST_SIGSEGV_RECOVERY
-    #include "../CrossPlatform/vm_alloc.cpp"
+    #include "../../../shared/CrossPlatform/vm_alloc.cpp"
     #include "../CrossPlatform/sigsegv.cpp"
   ],
   ac_cv_have_win32_exceptions=yes,
@@ -146,7 +148,7 @@ AC_CACHE_CHECK([whether we can skip instruction in SIGSEGV handler],
   AC_TRY_RUN([
     #define HAVE_SIGSEGV_SKIP_INSTRUCTION 1
     #define CONFIGURE_TEST_SIGSEGV_RECOVERY
-    #include "../CrossPlatform/vm_alloc.cpp"
+    #include "../../../shared/CrossPlatform/vm_alloc.cpp"
     #include "../CrossPlatform/sigsegv.cpp"
   ], ac_cv_have_skip_instruction=yes, ac_cv_have_skip_instruction=no,
   dnl When cross-compiling, assume it works
@@ -216,7 +218,7 @@ AS_IF([test  "x$have_bincue" = "xyes" ], [
 
 dnl BINCUE overrides
 if [[ "x$have_bincue" = "xyes" ]]; then
-  EXTRASRCS="$EXTRASRCS bincue.cpp"
+  EXTRASRCS="$EXTRASRCS ../../../shared/bincue.cpp"
 fi
 
 dnl CPU emulator sources

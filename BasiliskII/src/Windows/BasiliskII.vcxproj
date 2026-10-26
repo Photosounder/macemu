@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug JIT|Win32">
@@ -35,50 +35,50 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\adb.cpp" />
-    <ClCompile Include="..\audio.cpp" />
-    <ClCompile Include="..\cdrom.cpp" />
+    <ClCompile Include="..\..\..\shared\adb.cpp" />
+    <ClCompile Include="..\..\..\shared\audio.cpp" />
+    <ClCompile Include="..\..\..\shared\cdrom.cpp" />
     <ClCompile Include="..\CrossPlatform\sigsegv.cpp" />
-    <ClCompile Include="..\CrossPlatform\video_blit.cpp" />
-    <ClCompile Include="..\CrossPlatform\vm_alloc.cpp" />
-    <ClCompile Include="..\disk.cpp" />
-    <ClCompile Include="..\dummy\prefs_editor_dummy.cpp" />
-    <ClCompile Include="..\dummy\scsi_dummy.cpp" />
+    <ClCompile Include="..\..\..\shared\CrossPlatform\video_blit.cpp" />
+    <ClCompile Include="..\..\..\shared\CrossPlatform\vm_alloc.cpp" />
+    <ClCompile Include="..\..\..\shared\disk.cpp" />
+    <ClCompile Include="..\..\..\shared\dummy\prefs_editor_dummy.cpp" />
+    <ClCompile Include="..\..\..\shared\dummy\scsi_dummy.cpp" />
     <ClCompile Include="..\emul_op.cpp" />
     <ClCompile Include="..\ether.cpp" />
-    <ClCompile Include="..\extfs.cpp" />
+    <ClCompile Include="..\..\..\shared\extfs.cpp" />
     <ClCompile Include="..\macos_util.cpp" />
     <ClCompile Include="..\main.cpp" />
-    <ClCompile Include="..\prefs.cpp" />
+    <ClCompile Include="..\..\..\shared\prefs.cpp" />
     <ClCompile Include="..\prefs_items.cpp" />
     <ClCompile Include="..\rom_patches.cpp" />
     <ClCompile Include="..\rsrc_patches.cpp" />
-    <ClCompile Include="..\scsi.cpp" />
-    <ClCompile Include="..\SDL\audio_sdl.cpp" />
-    <ClCompile Include="..\SDL\video_sdl.cpp" />
-    <ClCompile Include="..\SDL\video_sdl2.cpp" />
+    <ClCompile Include="..\..\..\shared\scsi.cpp" />
+    <ClCompile Include="..\..\..\shared\SDL\audio_sdl.cpp" />
+    <ClCompile Include="..\..\..\shared\SDL\video_sdl.cpp" />
+    <ClCompile Include="..\..\..\shared\SDL\video_sdl2.cpp" />
     <ClCompile Include="..\serial.cpp" />
-    <ClCompile Include="..\slirp\bootp.c" />
-    <ClCompile Include="..\slirp\cksum.c" />
-    <ClCompile Include="..\slirp\debug.c" />
-    <ClCompile Include="..\slirp\if.c" />
-    <ClCompile Include="..\slirp\ip_icmp.c" />
-    <ClCompile Include="..\slirp\ip_input.c" />
-    <ClCompile Include="..\slirp\ip_output.c" />
-    <ClCompile Include="..\slirp\mbuf.c" />
-    <ClCompile Include="..\slirp\misc.c" />
-    <ClCompile Include="..\slirp\sbuf.c" />
-    <ClCompile Include="..\slirp\slirp.c" />
-    <ClCompile Include="..\slirp\socket.c" />
-    <ClCompile Include="..\slirp\tcp_input.c" />
-    <ClCompile Include="..\slirp\tcp_output.c" />
-    <ClCompile Include="..\slirp\tcp_subr.c" />
-    <ClCompile Include="..\slirp\tcp_timer.c" />
-    <ClCompile Include="..\slirp\tftp.c" />
-    <ClCompile Include="..\slirp\udp.c" />
+    <ClCompile Include="..\..\..\shared\slirp\bootp.c" />
+    <ClCompile Include="..\..\..\shared\slirp\cksum.c" />
+    <ClCompile Include="..\..\..\shared\slirp\debug.c" />
+    <ClCompile Include="..\..\..\shared\slirp\if.c" />
+    <ClCompile Include="..\..\..\shared\slirp\ip_icmp.c" />
+    <ClCompile Include="..\..\..\shared\slirp\ip_input.c" />
+    <ClCompile Include="..\..\..\shared\slirp\ip_output.c" />
+    <ClCompile Include="..\..\..\shared\slirp\mbuf.c" />
+    <ClCompile Include="..\..\..\shared\slirp\misc.c" />
+    <ClCompile Include="..\..\..\shared\slirp\sbuf.c" />
+    <ClCompile Include="..\..\..\shared\slirp\slirp.c" />
+    <ClCompile Include="..\..\..\shared\slirp\socket.c" />
+    <ClCompile Include="..\..\..\shared\slirp\tcp_input.c" />
+    <ClCompile Include="..\..\..\shared\slirp\tcp_output.c" />
+    <ClCompile Include="..\..\..\shared\slirp\tcp_subr.c" />
+    <ClCompile Include="..\..\..\shared\slirp\tcp_timer.c" />
+    <ClCompile Include="..\..\..\shared\slirp\tftp.c" />
+    <ClCompile Include="..\..\..\shared\slirp\udp.c" />
     <ClCompile Include="..\slot_rom.cpp" />
-    <ClCompile Include="..\sony.cpp" />
-    <ClCompile Include="..\timer.cpp" />
+    <ClCompile Include="..\..\..\shared\sony.cpp" />
+    <ClCompile Include="..\..\..\shared\timer.cpp" />
     <ClCompile Include="..\uae_cpu\basilisk_glue.cpp" />
     <ClCompile Include="..\uae_cpu\compemu.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
@@ -119,35 +119,35 @@
     <ClCompile Include="..\uae_cpu\readcpu.cpp" />
     <ClCompile Include="..\user_strings.cpp" />
     <ClCompile Include="..\video.cpp" />
-    <ClCompile Include="b2ether\packet32.cpp" />
-    <ClCompile Include="cdenable\cache.cpp" />
-    <ClCompile Include="cdenable\eject_nt.cpp" />
-    <ClCompile Include="cdenable\ntcd.cpp" />
-    <ClCompile Include="clip_windows.cpp" />
-    <ClCompile Include="ether_windows.cpp" />
-    <ClCompile Include="extfs_windows.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\b2ether\packet32.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\cdenable\cache.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\cdenable\eject_nt.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\cdenable\ntcd.cpp" />
+    <ClCompile Include="../../../shared/Windows/clip_windows.cpp" />
+    <ClCompile Include="../../../shared/Windows/ether_windows.cpp" />
+    <ClCompile Include="../../../shared/Windows/extfs_windows.cpp" />
     <ClCompile Include="main_windows.cpp" />
-    <ClCompile Include="posix_emu.cpp" />
+    <ClCompile Include="../../../shared/Windows/posix_emu.cpp" />
     <ClCompile Include="prefs_windows.cpp" />
-    <ClCompile Include="router\arp.cpp" />
-    <ClCompile Include="router\dump.cpp" />
-    <ClCompile Include="router\dynsockets.cpp" />
-    <ClCompile Include="router\ftp.cpp" />
-    <ClCompile Include="router\icmp.cpp" />
-    <ClCompile Include="router\iphelp.cpp" />
-    <ClCompile Include="router\ipsocket.cpp" />
-    <ClCompile Include="router\mib\interfaces.cpp" />
-    <ClCompile Include="router\mib\mibaccess.cpp" />
-    <ClCompile Include="router\router.cpp" />
-    <ClCompile Include="router\tcp.cpp" />
-    <ClCompile Include="router\udp.cpp" />
-    <ClCompile Include="serial_windows.cpp" />
-    <ClCompile Include="sys_windows.cpp" />
-    <ClCompile Include="timer_windows.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\arp.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\dump.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\dynsockets.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\ftp.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\icmp.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\iphelp.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\ipsocket.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\mib\interfaces.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\mib\mibaccess.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\router.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\tcp.cpp" />
+    <ClCompile Include="..\..\..\shared\Windows\router\udp.cpp" />
+    <ClCompile Include="../../../shared/Windows/serial_windows.cpp" />
+    <ClCompile Include="../../../shared/Windows/sys_windows.cpp" />
+    <ClCompile Include="../../../shared/Windows/timer_windows.cpp" />
     <ClCompile Include="user_strings_windows.cpp" />
-    <ClCompile Include="util_windows.cpp" />
-    <ClCompile Include="xpram_windows.cpp" />
-    <ClCompile Include="..\xpram.cpp" />
+    <ClCompile Include="../../../shared/Windows/util_windows.cpp" />
+    <ClCompile Include="../../../shared/Windows/xpram_windows.cpp" />
+    <ClCompile Include="..\..\..\shared\xpram.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="BasiliskII.ico" />
@@ -156,63 +156,63 @@
     <ResourceCompile Include="BasiliskII.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\CrossPlatform\sigsegv.h" />
-    <ClInclude Include="..\CrossPlatform\video_blit.h" />
-    <ClInclude Include="..\CrossPlatform\video_vosf.h" />
-    <ClInclude Include="..\CrossPlatform\vm_alloc.h" />
-    <ClInclude Include="..\include\adb.h" />
-    <ClInclude Include="..\include\audio.h" />
-    <ClInclude Include="..\include\audio_defs.h" />
-    <ClInclude Include="..\include\cdrom.h" />
-    <ClInclude Include="..\include\clip.h" />
-    <ClInclude Include="..\include\debug.h" />
-    <ClInclude Include="..\include\disk.h" />
+    <ClInclude Include="..\..\..\shared\CrossPlatform\sigsegv.h" />
+    <ClInclude Include="..\..\..\shared\CrossPlatform\video_blit.h" />
+    <ClInclude Include="..\..\..\shared\CrossPlatform\video_vosf.h" />
+    <ClInclude Include="..\..\..\shared\CrossPlatform\vm_alloc.h" />
+    <ClInclude Include="..\..\..\shared\include\adb.h" />
+    <ClInclude Include="..\..\..\shared\include\audio.h" />
+    <ClInclude Include="..\..\..\shared\include\audio_defs.h" />
+    <ClInclude Include="..\..\..\shared\include\cdrom.h" />
+    <ClInclude Include="..\..\..\shared\include\clip.h" />
+    <ClInclude Include="..\..\..\shared\include\debug.h" />
+    <ClInclude Include="..\..\..\shared\include\disk.h" />
     <ClInclude Include="..\include\emul_op.h" />
     <ClInclude Include="..\include\ether.h" />
     <ClInclude Include="..\include\ether_defs.h" />
-    <ClInclude Include="..\include\extfs.h" />
-    <ClInclude Include="..\include\extfs_defs.h" />
+    <ClInclude Include="..\..\..\shared\include\extfs.h" />
+    <ClInclude Include="..\..\..\shared\include\extfs_defs.h" />
     <ClInclude Include="..\include\macos_util.h" />
     <ClInclude Include="..\include\main.h" />
-    <ClInclude Include="..\include\pict.h" />
-    <ClInclude Include="..\include\prefs.h" />
-    <ClInclude Include="..\include\prefs_editor.h" />
+    <ClInclude Include="..\..\..\shared\include\pict.h" />
+    <ClInclude Include="..\..\..\shared\include\prefs.h" />
+    <ClInclude Include="..\..\..\shared\include\prefs_editor.h" />
     <ClInclude Include="..\include\rom_patches.h" />
     <ClInclude Include="..\include\rsrc_patches.h" />
-    <ClInclude Include="..\include\scsi.h" />
-    <ClInclude Include="..\include\serial.h" />
-    <ClInclude Include="..\include\serial_defs.h" />
+    <ClInclude Include="..\..\..\shared\include\scsi.h" />
+    <ClInclude Include="..\..\..\shared\include\serial.h" />
+    <ClInclude Include="..\..\..\shared\include\serial_defs.h" />
     <ClInclude Include="..\include\slot_rom.h" />
-    <ClInclude Include="..\include\sony.h" />
-    <ClInclude Include="..\include\sys.h" />
-    <ClInclude Include="..\include\timer.h" />
+    <ClInclude Include="..\..\..\shared\include\sony.h" />
+    <ClInclude Include="..\..\..\shared\include\sys.h" />
+    <ClInclude Include="..\..\..\shared\include\timer.h" />
     <ClInclude Include="..\include\user_strings.h" />
     <ClInclude Include="..\include\version.h" />
     <ClInclude Include="..\include\video.h" />
     <ClInclude Include="..\include\video_defs.h" />
-    <ClInclude Include="..\include\xpram.h" />
-    <ClInclude Include="..\slirp\bootp.h" />
-    <ClInclude Include="..\slirp\ctl.h" />
-    <ClInclude Include="..\slirp\debug.h" />
-    <ClInclude Include="..\slirp\icmp_var.h" />
-    <ClInclude Include="..\slirp\if.h" />
-    <ClInclude Include="..\slirp\ip.h" />
-    <ClInclude Include="..\slirp\ip_icmp.h" />
-    <ClInclude Include="..\slirp\libslirp.h" />
-    <ClInclude Include="..\slirp\main.h" />
-    <ClInclude Include="..\slirp\mbuf.h" />
-    <ClInclude Include="..\slirp\misc.h" />
-    <ClInclude Include="..\slirp\sbuf.h" />
-    <ClInclude Include="..\slirp\slirp.h" />
-    <ClInclude Include="..\slirp\slirp_config.h" />
-    <ClInclude Include="..\slirp\socket.h" />
-    <ClInclude Include="..\slirp\tcp.h" />
-    <ClInclude Include="..\slirp\tcpip.h" />
-    <ClInclude Include="..\slirp\tcp_timer.h" />
-    <ClInclude Include="..\slirp\tcp_var.h" />
-    <ClInclude Include="..\slirp\tftp.h" />
-    <ClInclude Include="..\slirp\udp.h" />
-    <ClInclude Include="..\uae_cpu\compiler\codegen_x86.h" />
+    <ClInclude Include="..\..\..\shared\include\xpram.h" />
+    <ClInclude Include="..\..\..\shared\slirp\bootp.h" />
+    <ClInclude Include="..\..\..\shared\slirp\ctl.h" />
+    <ClInclude Include="..\..\..\shared\slirp\debug.h" />
+    <ClInclude Include="..\..\..\shared\slirp\icmp_var.h" />
+    <ClInclude Include="..\..\..\shared\slirp\if.h" />
+    <ClInclude Include="..\..\..\shared\slirp\ip.h" />
+    <ClInclude Include="..\..\..\shared\slirp\ip_icmp.h" />
+    <ClInclude Include="..\..\..\shared\slirp\libslirp.h" />
+    <ClInclude Include="..\..\..\shared\slirp\main.h" />
+    <ClInclude Include="..\..\..\shared\slirp\mbuf.h" />
+    <ClInclude Include="..\..\..\shared\slirp\misc.h" />
+    <ClInclude Include="..\..\..\shared\slirp\sbuf.h" />
+    <ClInclude Include="..\..\..\shared\slirp\slirp.h" />
+    <ClInclude Include="..\..\..\shared\slirp\slirp_config.h" />
+    <ClInclude Include="..\..\..\shared\slirp\socket.h" />
+    <ClInclude Include="..\..\..\shared\slirp\tcp.h" />
+    <ClInclude Include="..\..\..\shared\slirp\tcpip.h" />
+    <ClInclude Include="..\..\..\shared\slirp\tcp_timer.h" />
+    <ClInclude Include="..\..\..\shared\slirp\tcp_var.h" />
+    <ClInclude Include="..\..\..\shared\slirp\tftp.h" />
+    <ClInclude Include="..\..\..\shared\slirp\udp.h" />
+    <ClInclude Include="..\..\..\shared\uae_cpu\compiler\codegen_x86.h" />
     <ClInclude Include="..\uae_cpu\compiler\compemu.h" />
     <ClInclude Include="..\uae_cpu\comptbl.h" />
     <ClInclude Include="..\uae_cpu\cputbl.h" />
@@ -226,34 +226,34 @@
     <ClInclude Include="..\uae_cpu\noflags.h" />
     <ClInclude Include="..\uae_cpu\readcpu.h" />
     <ClInclude Include="..\uae_cpu\spcflags.h" />
-    <ClInclude Include="b2ether\inc\b2ether_hl.h" />
-    <ClInclude Include="b2ether\inc\ntddpack.h" />
-    <ClInclude Include="b2ether\multiopt.h" />
-    <ClInclude Include="cdenable\cache.h" />
-    <ClInclude Include="cdenable\cdenable.h" />
-    <ClInclude Include="cdenable\eject_nt.h" />
-    <ClInclude Include="cdenable\ntcd.h" />
-    <ClInclude Include="cd_defs.h" />
+    <ClInclude Include="..\..\..\shared\Windows\b2ether\inc\b2ether_hl.h" />
+    <ClInclude Include="..\..\..\shared\Windows\b2ether\inc\ntddpack.h" />
+    <ClInclude Include="..\..\..\shared\Windows\b2ether\multiopt.h" />
+    <ClInclude Include="..\..\..\shared\Windows\cdenable\cache.h" />
+    <ClInclude Include="..\..\..\shared\Windows\cdenable\cdenable.h" />
+    <ClInclude Include="..\..\..\shared\Windows\cdenable\eject_nt.h" />
+    <ClInclude Include="..\..\..\shared\Windows\cdenable\ntcd.h" />
+    <ClInclude Include="../../../shared/Windows/cd_defs.h" />
     <ClInclude Include="config.h" />
-    <ClInclude Include="ether_windows.h" />
+    <ClInclude Include="../../../shared/Windows/ether_windows.h" />
     <ClInclude Include="kernel_windows.h" />
-    <ClInclude Include="posix_emu.h" />
-    <ClInclude Include="router\arp.h" />
-    <ClInclude Include="router\dump.h" />
-    <ClInclude Include="router\dynsockets.h" />
-    <ClInclude Include="router\ftp.h" />
-    <ClInclude Include="router\icmp.h" />
-    <ClInclude Include="router\iphelp.h" />
-    <ClInclude Include="router\ipsocket.h" />
-    <ClInclude Include="router\mib\interfaces.h" />
-    <ClInclude Include="router\mib\mibaccess.h" />
-    <ClInclude Include="router\router.h" />
-    <ClInclude Include="router\router_types.h" />
-    <ClInclude Include="router\tcp.h" />
-    <ClInclude Include="router\udp.h" />
+    <ClInclude Include="../../../shared/Windows/posix_emu.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\arp.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\dump.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\dynsockets.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\ftp.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\icmp.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\iphelp.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\ipsocket.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\mib\interfaces.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\mib\mibaccess.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\router.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\router_types.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\tcp.h" />
+    <ClInclude Include="..\..\..\shared\Windows\router\udp.h" />
     <ClInclude Include="sysdeps.h" />
     <ClInclude Include="user_strings_windows.h" />
-    <ClInclude Include="util_windows.h" />
+    <ClInclude Include="../../../shared/Windows/util_windows.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\external\SDL\VisualC\SDLmain\SDLmain.vcxproj">
@@ -407,7 +407,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>HAVE_CONFIG_H;DIRECT_ADDRESSING;UNALIGNED_PROFITABLE;MSVC_INTRINSICS;OPTIMIZED_FLAGS;SAHF_SETO_PROFITABLE;FPU_IEEE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\uae_cpu;.;..\CrossPlatform;..\slirp;..\..\..\external\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\shared\include;..\uae_cpu;.;..\CrossPlatform;..\..\..\shared\slirp;..\..\..\external\SDL\include;..\..\..\shared\CrossPlatform;..\..\..\shared\Windows;..\..\..\shared\uae_cpu\compiler</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <XMLDocumentationFileName>$(IntDir)%(RelativeDir)</XMLDocumentationFileName>
@@ -443,7 +443,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>HAVE_CONFIG_H;DIRECT_ADDRESSING;UNALIGNED_PROFITABLE;MSVC_INTRINSICS;OPTIMIZED_FLAGS;SAHF_SETO_PROFITABLE;FPU_IEEE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\uae_cpu;.;..\CrossPlatform;..\slirp;..\..\..\external\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\shared\include;..\uae_cpu;.;..\CrossPlatform;..\..\..\shared\slirp;..\..\..\external\SDL\include;..\..\..\shared\CrossPlatform;..\..\..\shared\Windows;..\..\..\shared\uae_cpu\compiler</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <XMLDocumentationFileName>$(IntDir)%(RelativeDir)</XMLDocumentationFileName>
@@ -476,7 +476,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>HAVE_CONFIG_H;DIRECT_ADDRESSING;UNALIGNED_PROFITABLE;MSVC_INTRINSICS;OPTIMIZED_FLAGS;SAHF_SETO_PROFITABLE;FPU_IEEE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;USE_JIT;USE_JIT_FPU;JIT_DEBUG;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\uae_cpu;.;..\CrossPlatform;..\slirp;..\..\..\external\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\shared\include;..\uae_cpu;.;..\CrossPlatform;..\..\..\shared\slirp;..\..\..\external\SDL\include;..\..\..\shared\CrossPlatform;..\..\..\shared\Windows;..\..\..\shared\uae_cpu\compiler</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <XMLDocumentationFileName>$(IntDir)%(RelativeDir)</XMLDocumentationFileName>
@@ -512,7 +512,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>HAVE_CONFIG_H;DIRECT_ADDRESSING;UNALIGNED_PROFITABLE;MSVC_INTRINSICS;OPTIMIZED_FLAGS;SAHF_SETO_PROFITABLE;FPU_IEEE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;USE_JIT;USE_JIT_FPU;JIT_DEBUG;WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\uae_cpu;.;..\CrossPlatform;..\slirp;..\..\..\external\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\shared\include;..\uae_cpu;.;..\CrossPlatform;..\..\..\shared\slirp;..\..\..\external\SDL\include;..\..\..\shared\CrossPlatform;..\..\..\shared\Windows;..\..\..\shared\uae_cpu\compiler</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <XMLDocumentationFileName>$(IntDir)%(RelativeDir)</XMLDocumentationFileName>
@@ -547,7 +547,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>HAVE_CONFIG_H;DIRECT_ADDRESSING;UNALIGNED_PROFITABLE;MSVC_INTRINSICS;OPTIMIZED_FLAGS;SAHF_SETO_PROFITABLE;FPU_IEEE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;WIN32;_WINDOWS;NDEBUG;OPTIMIZED_FLAGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\uae_cpu;.;..\CrossPlatform;..\slirp;..\..\..\external\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\shared\include;..\uae_cpu;.;..\CrossPlatform;..\..\..\shared\slirp;..\..\..\external\SDL\include;..\..\..\shared\CrossPlatform;..\..\..\shared\Windows;..\..\..\shared\uae_cpu\compiler</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <XMLDocumentationFileName>$(IntDir)%(RelativeDir)</XMLDocumentationFileName>
@@ -587,7 +587,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>HAVE_CONFIG_H;DIRECT_ADDRESSING;UNALIGNED_PROFITABLE;MSVC_INTRINSICS;OPTIMIZED_FLAGS;SAHF_SETO_PROFITABLE;FPU_IEEE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;WIN32;_WINDOWS;NDEBUG;OPTIMIZED_FLAGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\uae_cpu;.;..\CrossPlatform;..\slirp;..\..\..\external\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\shared\include;..\uae_cpu;.;..\CrossPlatform;..\..\..\shared\slirp;..\..\..\external\SDL\include;..\..\..\shared\CrossPlatform;..\..\..\shared\Windows;..\..\..\shared\uae_cpu\compiler</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <XMLDocumentationFileName>$(IntDir)%(RelativeDir)</XMLDocumentationFileName>
@@ -624,7 +624,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>HAVE_CONFIG_H;DIRECT_ADDRESSING;UNALIGNED_PROFITABLE;MSVC_INTRINSICS;OPTIMIZED_FLAGS;SAHF_SETO_PROFITABLE;FPU_IEEE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;WIN32;_WINDOWS;NDEBUG;OPTIMIZED_FLAGS;USE_JIT;USE_JIT_FPU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\uae_cpu;.;..\CrossPlatform;..\slirp;..\..\..\external\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\shared\include;..\uae_cpu;.;..\CrossPlatform;..\..\..\shared\slirp;..\..\..\external\SDL\include;..\..\..\shared\CrossPlatform;..\..\..\shared\Windows;..\..\..\shared\uae_cpu\compiler</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <XMLDocumentationFileName>$(IntDir)%(RelativeDir)</XMLDocumentationFileName>
@@ -664,7 +664,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>HAVE_CONFIG_H;DIRECT_ADDRESSING;UNALIGNED_PROFITABLE;MSVC_INTRINSICS;OPTIMIZED_FLAGS;SAHF_SETO_PROFITABLE;FPU_IEEE;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_WARNINGS;WIN32;_WINDOWS;NDEBUG;OPTIMIZED_FLAGS;USE_JIT;USE_JIT_FPU;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\include;..\uae_cpu;.;..\CrossPlatform;..\slirp;..\..\..\external\SDL\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\include;..\..\..\shared\include;..\uae_cpu;.;..\CrossPlatform;..\..\..\shared\slirp;..\..\..\external\SDL\include;..\..\..\shared\CrossPlatform;..\..\..\shared\Windows;..\..\..\shared\uae_cpu\compiler</AdditionalIncludeDirectories>
       <AssemblerListingLocation>$(IntDir)%(RelativeDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)%(RelativeDir)</ObjectFileName>
       <XMLDocumentationFileName>$(IntDir)%(RelativeDir)</XMLDocumentationFileName>

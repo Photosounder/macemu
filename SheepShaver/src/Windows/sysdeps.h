@@ -25,7 +25,11 @@
 #error "Your compiler is not ANSI. Get a real one."
 #endif
 
+#ifdef SHEEPSHAVER_WAHE
+#include "../WAHE/config.h"
+#else
 #include "config.h"
+#endif
 #include "user_strings_windows.h"
 
 //#ifndef STDC_HEADERS

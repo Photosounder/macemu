@@ -3,8 +3,12 @@ dnl Written in 2002 by Christian Bauer
 
 AC_INIT([SheepShaver], 2.4, [Christian.Bauer@uni-mainz.de], SheepShaver)
 AC_CONFIG_SRCDIR(main_unix.cpp)
+AC_CONFIG_AUX_DIR([../../../shared/Unix])
 AC_PREREQ(2.52)
 AC_CONFIG_HEADER(config.h)
+
+dnl Make shared exception headers available to configure-time compilation tests.
+CPPFLAGS="$CPPFLAGS -I$srcdir/../../../shared/CrossPlatform"
 AH_TOP(
 #ifndef CONFIG_H
 #define CONFIG_H
@@ -299,7 +303,7 @@ no:linux*|no:netbsd*)
   SEMSRC=
   AC_CHECK_FUNCS(sem_init, , [
   if test "x$HAVE_PTHREADS" = "xyes"; then
-    SEMSRC=posix_sem.cpp
+    SEMSRC=../../../shared/Unix/posix_sem.cpp
   fi
   ])
   ;;
@@ -347,7 +351,7 @@ m4_ifndef([PKG_PROG_PKG_CONFIG], [m4_fatal(
 PKG_PROG_PKG_CONFIG
 
 dnl We use GTK+ if possible.
-UISRCS=../dummy/prefs_editor_dummy.cpp
+UISRCS=../../../shared/dummy/prefs_editor_dummy.cpp
 if [[ "$WANT_GTK" = "GTK3" -o "$WANT_GTK" = "any" ]]; then
   PKG_CHECK_MODULES([GTK3], [gtk+-3.0 >= 3.14.5], [
     WANT_GTK=GTK3
@@ -383,7 +387,7 @@ fi
 if [[ "x$WANT_GTK" != "xno" -a "x$WANT_STANDALONE_GUI" = "xno" ]]; then
   AC_DEFINE(ENABLE_GTK, 1, [Define if using GTK.])
   if [[ "$WANT_GTK" = "GTK3" ]]; then
-    UISRCS="prefs_editor_gtk3.cpp g_resource.cpp color_scheme.cpp"
+    UISRCS="../../../shared/Unix/prefs_editor_gtk3.cpp g_resource.cpp ../../../shared/Unix/color_scheme.cpp"
   else
     UISRCS="prefs_editor_gtk.cpp"
   fi
@@ -513,7 +517,7 @@ no:linux*)
   ;;
 esac
 
-dnl Check for headers and functions related to pty support (sshpty.c)
+dnl Check for headers and functions related to pty support (../../../shared/Unix/sshpty.c)
 dnl From openssh-3.2.2p1 configure.ac
 AC_CHECK_HEADERS(strings.h login.h sys/bsdtty.h sys/stat.h util.h pty.h)
 AC_CHECK_FUNCS(_getpty vhangup strlcpy)
@@ -526,7 +530,7 @@ case "$host" in
 	no_dev_ptmx=1
 	;;
 mips-sony-bsd|mips-sony-newsos4)
-	AC_DEFINE(HAVE_NEWS4, 1, [Define if you are on NEWS-OS (additions from openssh-3.2.2p1, for sshpty.c).])
+	AC_DEFINE(HAVE_NEWS4, 1, [Define if you are on NEWS-OS (additions from openssh-3.2.2p1, for ../../../shared/Unix/sshpty.c).])
 	;;
 *-*-sco3.2v4*)
 	no_dev_ptmx=1
@@ -649,27 +653,27 @@ AC_CHECK_FRAMEWORK(AppKit, [])
 AC_CHECK_FRAMEWORK(Metal, [])
 
 dnl Select system-dependant sources.
-SERIALSRC=serial_unix.cpp
+SERIALSRC=../../../shared/Unix/serial_unix.cpp
 ETHERSRC=../dummy/ether_dummy.cpp
-SCSISRC=../dummy/scsi_dummy.cpp
-AUDIOSRC=../dummy/audio_dummy.cpp
+SCSISRC=../../../shared/dummy/scsi_dummy.cpp
+AUDIOSRC=../../../shared/dummy/audio_dummy.cpp
 PREFSSRC=../dummy/prefs_dummy.cpp
-EXTFSSRC=extfs_unix.cpp
+EXTFSSRC=../../../shared/Unix/extfs_unix.cpp
 EXTRASYSSRCS=
 case "$target_os" in
 linux*)
-  ETHERSRC=ether_unix.cpp
-  AUDIOSRC=audio_oss_esd.cpp
-  SCSISRC=Linux/scsi_linux.cpp
+  ETHERSRC=../../../shared/Unix/ether_unix.cpp
+  AUDIOSRC=../../../shared/Unix/audio_oss_esd.cpp
+  SCSISRC=../../../shared/Unix/Linux/scsi_linux.cpp
   if [[ "x$EMULATED_PPC" = "xno" ]]; then
     EXTRASYSSRCS="paranoia.cpp Linux/sheepthreads.c ppc_asm.S"
   fi
   ;;
 freebsd*)
-  ETHERSRC=ether_unix.cpp
+  ETHERSRC=../../../shared/Unix/ether_unix.cpp
   ;;
 netbsd*)
-  ETHERSRC=ether_unix.cpp
+  ETHERSRC=../../../shared/Unix/ether_unix.cpp
   if [[ "x$EMULATED_PPC" = "xno" ]]; then
     EXTRASYSSRCS="paranoia.cpp NetBSD/sheepthreads.c ppc_asm.S"
   fi
@@ -681,27 +685,27 @@ dnl Needed for SDL2
   CXXFLAGS="$CXXFLAGS -std=c++11"
   ;;
 darwin*)
-  ETHERSRC=ether_unix.cpp
+  ETHERSRC=../../../shared/Unix/ether_unix.cpp
   if [[ "x$EMULATED_PPC" = "xno" ]]; then
     EXTRASYSSRCS="paranoia.cpp ppc_asm.S"
   fi
   if [[ "x$ac_cv_framework_IOKit" = "xyes" -a "x$ac_cv_framework_CoreFoundation" = "xyes" ]]; then
-    EXTRASYSSRCS="$EXTRASYSSRCS ../MacOSX/sys_darwin.cpp"
+    EXTRASYSSRCS="$EXTRASYSSRCS ../../../shared/MacOSX/sys_darwin.cpp"
   fi
   if [[ "x$ac_cv_framework_Carbon" = "xyes" ]]; then
-    EXTFSSRC=../MacOSX/extfs_macosx.cpp
+    EXTFSSRC=../../../shared/MacOSX/extfs_macosx.cpp
     if [[ "x$ac_cv_framework_AppKit" = "xyes" -a "x$WANT_GTK" = "xno" ]]; then
       PREFSSRC="../MacOSX/prefs_macosx.mm ../MacOSX/Launcher/VMSettingsController.mm ../MacOSX/Launcher/DiskType.m"
       CPPFLAGS="$CPPFLAGS -I../MacOSX/Launcher"
     fi
   fi
   if [[ "x$WANT_ESD" = "xno" -a "x$ac_cv_framework_CoreAudio" = "xyes" -a "x$WANT_SDL_AUDIO" = "xno" ]]; then
-    AUDIOSRC="../MacOSX/audio_macosx.cpp ../MacOSX/AudioBackEnd.cpp ../MacOSX/AudioDevice.cpp ../MacOSX/MacOSX_sound_if.cpp"
+    AUDIOSRC="../../../shared/MacOSX/audio_macosx.cpp ../../../shared/MacOSX/AudioBackEnd.cpp ../../../shared/MacOSX/AudioDevice.cpp ../../../shared/MacOSX/MacOSX_sound_if.cpp"
     OSX_CORE_AUDIO="-DOSX_CORE_AUDIO"
   fi
   ;;
 irix*)
-  AUDIOSRC=Irix/audio_irix.cpp
+  AUDIOSRC=../../../shared/Unix/Irix/audio_irix.cpp
   LIBS="$LIBS -laudio"
   WANT_ESD=no
 
@@ -758,18 +762,18 @@ dnl Is the slirp library supported?
 case "$ac_cv_have_byte_bitfields" in
 yes|"guessing yes")
   CAN_SLIRP=yes
-  ETHERSRC=ether_unix.cpp
+  ETHERSRC=../../../shared/Unix/ether_unix.cpp
   ;;
 esac
 if [[ -n "$CAN_SLIRP" ]]; then
   AC_DEFINE(HAVE_SLIRP, 1, [Define if slirp library is supported])
   SLIRP_SRCS="\
-    ../slirp/bootp.c     ../slirp/ip_output.c  ../slirp/tcp_input.c  \
-    ../slirp/cksum.c     ../slirp/mbuf.c       ../slirp/tcp_output.c \
-    ../slirp/debug.c     ../slirp/misc.c       ../slirp/tcp_subr.c   \
-    ../slirp/if.c        ../slirp/sbuf.c       ../slirp/tcp_timer.c  \
-    ../slirp/ip_icmp.c   ../slirp/slirp.c      ../slirp/tftp.c       \
-    ../slirp/ip_input.c  ../slirp/socket.c     ../slirp/udp.c"
+    ../../../shared/slirp/bootp.c     ../../../shared/slirp/ip_output.c  ../../../shared/slirp/tcp_input.c  \
+    ../../../shared/slirp/cksum.c     ../../../shared/slirp/mbuf.c       ../../../shared/slirp/tcp_output.c \
+    ../../../shared/slirp/debug.c     ../../../shared/slirp/misc.c       ../../../shared/slirp/tcp_subr.c   \
+    ../../../shared/slirp/if.c        ../../../shared/slirp/sbuf.c       ../../../shared/slirp/tcp_timer.c  \
+    ../../../shared/slirp/ip_icmp.c   ../../../shared/slirp/slirp.c      ../../../shared/slirp/tftp.c       \
+    ../../../shared/slirp/ip_input.c  ../../../shared/slirp/socket.c     ../../../shared/slirp/udp.c"
 fi
 AC_SUBST(SLIRP_SRCS)
 
@@ -786,8 +790,8 @@ if [[ "x$WANT_SDL" = "xyes" ]]; then
 fi
 if [[ "x$WANT_SDL_VIDEO" = "xyes" ]]; then
   AC_DEFINE(USE_SDL_VIDEO, 1, [Define to enable SDL video graphics support.])
-  VIDEOSRCS="../SDL/video_sdl.cpp ../SDL/video_sdl2.cpp ../SDL/video_sdl3.cpp"
-  KEYCODES="../SDL/keycodes"
+  VIDEOSRCS="../../../shared/SDL/video_sdl.cpp ../../../shared/SDL/video_sdl2.cpp ../../../shared/SDL/video_sdl3.cpp"
+  KEYCODES="../../../shared/SDL/keycodes"
   if [[ "x$ac_cv_framework_Carbon" = "xyes" ]]; then
     AC_MSG_CHECKING([whether __LP64__ is defined])
     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#if !defined(__LP64__)
@@ -797,23 +801,23 @@ if [[ "x$WANT_SDL_VIDEO" = "xyes" ]]; then
                       [AC_MSG_RESULT(yes); LP64_DEFINED=yes],
                       [AC_MSG_RESULT(no)])
     if [[ "x$LP64_DEFINED" = "xyes" ]]; then
-      EXTRASYSSRCS="$EXTRASYSSRCS ../MacOSX/clip_macosx64.mm ../pict.c"
+      EXTRASYSSRCS="$EXTRASYSSRCS ../../../shared/MacOSX/clip_macosx64.mm ../../../shared/pict.c"
     else
-      EXTRASYSSRCS="$EXTRASYSSRCS ../MacOSX/clip_macosx.cpp"
+      EXTRASYSSRCS="$EXTRASYSSRCS ../../../shared/MacOSX/clip_macosx.cpp"
     fi
-    EXTRASYSSRCS="$EXTRASYSSRCS ../MacOSX/utils_macosx.mm"
+    EXTRASYSSRCS="$EXTRASYSSRCS ../../../shared/MacOSX/utils_macosx.mm"
     CPPFLAGS="$CPPFLAGS -I../MacOSX"
   else
-    EXTRASYSSRCS="$EXTRASYSSRCS ../dummy/clip_dummy.cpp"
+    EXTRASYSSRCS="$EXTRASYSSRCS ../../../shared/dummy/clip_dummy.cpp"
   fi
 else
   VIDEOSRCS="video_x.cpp"
-  KEYCODES="keycodes"
-  EXTRASYSSRCS="$EXTRASYSSRCS clip_unix.cpp"
+  KEYCODES="../../../shared/Unix/keycodes"
+  EXTRASYSSRCS="$EXTRASYSSRCS ../../../shared/Unix/clip_unix.cpp"
 fi
 if [[ "x$WANT_SDL_AUDIO" = "xyes" ]]; then
   AC_DEFINE(USE_SDL_AUDIO, 1, [Define to enable SDL audio support])
-  AUDIOSRC="../SDL/audio_sdl.cpp ../SDL/audio_sdl3.cpp"
+  AUDIOSRC="../../../shared/SDL/audio_sdl.cpp ../../../shared/SDL/audio_sdl3.cpp"
 fi
 
 dnl BINCUE overrides
@@ -825,7 +829,7 @@ fi
 dnl libvhd overrides
 
 if [[ "x$have_libvhd" = "xyes" ]]; then
-  EXTRASYSSRCS="$EXTRASYSSRCS vhd_unix.cpp"
+  EXTRASYSSRCS="$EXTRASYSSRCS ../../../shared/Unix/vhd_unix.cpp"
 fi
 
 
@@ -893,7 +897,7 @@ AC_CACHE_CHECK([whether vm_protect works],
     AC_TRY_RUN([
       #define CONFIGURE_TEST_VM_MAP
       #define TEST_VM_PROT_$test_def
-      #include "../CrossPlatform/vm_alloc.cpp"
+      #include "../../../shared/CrossPlatform/vm_alloc.cpp"
     ], ac_cv_vm_protect_works=no, rm -f core,
     dnl When cross-compiling, do not assume anything
     ac_cv_vm_protect_works="guessing no"
@@ -902,7 +906,7 @@ AC_CACHE_CHECK([whether vm_protect works],
   AC_TRY_RUN([
     #define CONFIGURE_TEST_VM_MAP
     #define TEST_VM_PROT_RDWR_WRITE
-    #include "../CrossPlatform/vm_alloc.cpp"
+    #include "../../../shared/CrossPlatform/vm_alloc.cpp"
   ], , ac_cv_vm_protect_works=no,
   dnl When cross-compiling, do not assume anything
   ac_cv_vm_protect_works="guessing no"
@@ -947,7 +951,7 @@ AC_CACHE_CHECK([whether mmap supports MAP_ANON],
     #define HAVE_MMAP_ANON
     #define CONFIGURE_TEST_VM_MAP
     #define TEST_VM_MMAP_ANON
-    #include "../CrossPlatform/vm_alloc.cpp"
+    #include "../../../shared/CrossPlatform/vm_alloc.cpp"
   ], ac_cv_mmap_anon=yes, ac_cv_mmap_anon=no,
   dnl When cross-compiling, do not assume anything.
   ac_cv_mmap_anon="guessing no"
@@ -966,7 +970,7 @@ AC_CACHE_CHECK([whether mmap supports MAP_ANONYMOUS],
     #define HAVE_MMAP_ANONYMOUS
     #define CONFIGURE_TEST_VM_MAP
     #define TEST_VM_MMAP_ANON
-    #include "../CrossPlatform/vm_alloc.cpp"
+    #include "../../../shared/CrossPlatform/vm_alloc.cpp"
   ], ac_cv_mmap_anonymous=yes, ac_cv_mmap_anonymous=no,
   dnl When cross-compiling, do not assume anything.
   ac_cv_mmap_anonymous="guessing no"
@@ -987,7 +991,7 @@ AC_CACHE_CHECK([whether mprotect works],
     AC_TRY_RUN([
       #define CONFIGURE_TEST_VM_MAP
       #define TEST_VM_PROT_$test_def
-      #include "../CrossPlatform/vm_alloc.cpp"
+      #include "../../../shared/CrossPlatform/vm_alloc.cpp"
     ], ac_cv_mprotect_works=no, rm -f core,
     dnl When cross-compiling, do not assume anything
     ac_cv_mprotect_works="guessing no"
@@ -996,7 +1000,7 @@ AC_CACHE_CHECK([whether mprotect works],
   AC_TRY_RUN([
     #define CONFIGURE_TEST_VM_MAP
     #define TEST_VM_PROT_RDWR_WRITE
-    #include "../CrossPlatform/vm_alloc.cpp"
+    #include "../../../shared/CrossPlatform/vm_alloc.cpp"
   ], , ac_cv_mprotect_works=no,
   dnl When cross-compiling, do not assume anything
   ac_cv_mprotect_works="guessing no"
@@ -1099,7 +1103,7 @@ AC_CACHE_CHECK([whether your system supports Mach exceptions],
   AC_TRY_RUN([
     #define HAVE_MACH_EXCEPTIONS 1
     #define CONFIGURE_TEST_SIGSEGV_RECOVERY
-    #include "../CrossPlatform/vm_alloc.cpp"
+    #include "../../../shared/CrossPlatform/vm_alloc.cpp"
     #include "../CrossPlatform/sigsegv.cpp"
   ],
   ac_cv_have_mach_exceptions=yes,
@@ -1124,7 +1128,7 @@ AC_CACHE_CHECK([whether your system supports Windows exceptions],
   AC_TRY_RUN([
     #define HAVE_WIN32_EXCEPTIONS 1
     #define CONFIGURE_TEST_SIGSEGV_RECOVERY
-    #include "../CrossPlatform/vm_alloc.cpp"
+    #include "../../../shared/CrossPlatform/vm_alloc.cpp"
     #include "../CrossPlatform/sigsegv.cpp"
   ], [
   sigsegv_recovery=win32
@@ -1149,7 +1153,7 @@ if [[ -z "$sigsegv_recovery" ]]; then
     AC_TRY_RUN([
       #define HAVE_SIGINFO_T 1
       #define CONFIGURE_TEST_SIGSEGV_RECOVERY
-      #include "../CrossPlatform/vm_alloc.cpp"
+      #include "../../../shared/CrossPlatform/vm_alloc.cpp"
       #include "../CrossPlatform/sigsegv.cpp"
     ],
     ac_cv_have_extended_signals=yes,
@@ -1176,7 +1180,7 @@ if [[ -z "$sigsegv_recovery" ]]; then
     AC_TRY_RUN([
       #define HAVE_SIGCONTEXT_SUBTERFUGE 1
       #define CONFIGURE_TEST_SIGSEGV_RECOVERY
-      #include "../CrossPlatform/vm_alloc.cpp"
+      #include "../../../shared/CrossPlatform/vm_alloc.cpp"
       #include "../CrossPlatform/sigsegv.cpp"
     ],
     ac_cv_have_sigcontext_hack=yes,
@@ -1201,7 +1205,7 @@ AC_CACHE_CHECK([whether we can skip instruction in SIGSEGV handler],
   AC_TRY_RUN([
     #define HAVE_SIGSEGV_SKIP_INSTRUCTION 1
     #define CONFIGURE_TEST_SIGSEGV_RECOVERY
-    #include "../CrossPlatform/vm_alloc.cpp"
+    #include "../../../shared/CrossPlatform/vm_alloc.cpp"
     #include "../CrossPlatform/sigsegv.cpp"
   ], ac_cv_have_skip_instruction=yes, ac_cv_have_skip_instruction=no,
   dnl When cross-compiling, do not assume anything.
@@ -1249,7 +1253,7 @@ if [[ "$WANT_ADDRESSING_MODE" = "direct" ]]; then
   cat >> conftest.$ac_ext << EOF
 #include <stdio.h>
 #include <string.h>
-#include "../CrossPlatform/vm_alloc.cpp"
+#include "../../../shared/CrossPlatform/vm_alloc.cpp"
 
 int main(void)
 {
@@ -1720,11 +1724,11 @@ fi
 
 dnl Check for linker script support
 case $target_os:$target_cpu in
-linux*:i?86)    LINKER_SCRIPT_FLAGS="-Wl,-T,ldscripts/linux-i386.ld";;
-linux*:x86_64)  LINKER_SCRIPT_FLAGS="-Wl,-T,ldscripts/linux-x86_64.ld";;
-linux*:powerpc) LINKER_SCRIPT_FLAGS="-Wl,-T,ldscripts/linux-ppc.ld";;
-netbsd*:i?86)   LINKER_SCRIPT_FLAGS="-Wl,-T,ldscripts/linux-i386.ld";;
-freebsd*:i?86)  LINKER_SCRIPT_FLAGS="-Wl,-T,ldscripts/freebsd-i386.ld";;
+linux*:i?86)    LINKER_SCRIPT_FLAGS="-Wl,-T,../../../shared/Unix/ldscripts/linux-i386.ld";;
+linux*:x86_64)  LINKER_SCRIPT_FLAGS="-Wl,-T,../../../shared/Unix/ldscripts/linux-x86_64.ld";;
+linux*:powerpc) LINKER_SCRIPT_FLAGS="-Wl,-T,../../../shared/Unix/ldscripts/linux-ppc.ld";;
+netbsd*:i?86)   LINKER_SCRIPT_FLAGS="-Wl,-T,../../../shared/Unix/ldscripts/linux-i386.ld";;
+freebsd*:i?86)  LINKER_SCRIPT_FLAGS="-Wl,-T,../../../shared/Unix/ldscripts/freebsd-i386.ld";;
 #darwin*:*)      LINKER_SCRIPT_FLAGS="-Wl,-seg1addr,0x78048000";;
 esac
 if [[ -n "$LINKER_SCRIPT_FLAGS" ]]; then

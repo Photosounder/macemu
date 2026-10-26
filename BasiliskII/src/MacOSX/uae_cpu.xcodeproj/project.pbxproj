@@ -72,7 +72,7 @@
 		E4F537D72642A8CC008B27DF /* readcpu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = readcpu.h; path = ../uae_cpu/readcpu.h; sourceTree = "<group>"; };
 		E4F537D82642A8CC008B27DF /* spcflags.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = spcflags.h; path = ../uae_cpu/spcflags.h; sourceTree = "<group>"; };
 		E4F537D92642A8CC008B27DF /* table68k */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = table68k; path = ../uae_cpu/table68k; sourceTree = "<group>"; };
-		E4F537E62642A8E8008B27DF /* codegen_x86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codegen_x86.h; path = ../uae_cpu/compiler/codegen_x86.h; sourceTree = "<group>"; };
+		E4F537E62642A8E8008B27DF /* codegen_x86.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = codegen_x86.h; path = ../../../shared/uae_cpu/compiler/codegen_x86.h; sourceTree = SOURCE_ROOT; };
 		E4F537E72642A8E8008B27DF /* compemu_fpp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = compemu_fpp.cpp; path = ../uae_cpu/compiler/compemu_fpp.cpp; sourceTree = "<group>"; };
 		E4F537E82642A8E8008B27DF /* compemu_support.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = compemu_support.cpp; path = ../uae_cpu/compiler/compemu_support.cpp; sourceTree = "<group>"; };
 		E4F537E92642A8E8008B27DF /* compemu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = compemu.h; path = ../uae_cpu/compiler/compemu.h; sourceTree = "<group>"; };
@@ -424,6 +424,11 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../shared/include",
+					"$(SRCROOT)/../../../shared/CrossPlatform",
+					"$(SRCROOT)/../../../shared/MacOSX",
+					"$(SRCROOT)/../../../shared/Unix",
+					"$(SRCROOT)/../../../shared/uae_cpu/compiler",
 					../CrossPlatform,
 					../include,
 					../MacOSX,
@@ -450,6 +455,11 @@
 				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
 				GCC_WARN_UNUSED_VARIABLE = NO;
 				HEADER_SEARCH_PATHS = (
+					"$(SRCROOT)/../../../shared/include",
+					"$(SRCROOT)/../../../shared/CrossPlatform",
+					"$(SRCROOT)/../../../shared/MacOSX",
+					"$(SRCROOT)/../../../shared/Unix",
+					"$(SRCROOT)/../../../shared/uae_cpu/compiler",
 					../CrossPlatform,
 					../include,
 					../MacOSX,

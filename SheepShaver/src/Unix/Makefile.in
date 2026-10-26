@@ -18,7 +18,7 @@ CXX = @CXX@
 GCR = @GCR@
 CFLAGS = @CFLAGS@
 CXXFLAGS = @CXXFLAGS@
-CPPFLAGS = @CPPFLAGS@ -I../include -I. -I../CrossPlatform -I../slirp
+CPPFLAGS = @CPPFLAGS@ -I../include -I../../../shared/include -I. -I../CrossPlatform -I../../../shared/slirp -I../../../shared/CrossPlatform -I../../../shared/Unix -I../../../shared/uae_cpu/compiler -I../../../shared/MacOSX
 DEFS = @DEFS@ -D_REENTRANT -DDATADIR=\"$(datadir)/$(APP)\"
 LDFLAGS = @LDFLAGS@
 LIBS = @LIBS@
@@ -42,21 +42,21 @@ INSTALL_DATA = @INSTALL_DATA@
 
 SLIRP_CFLAGS = @SLIRP_CFLAGS@
 SLIRP_SRCS = @SLIRP_SRCS@
-SLIRP_OBJS = $(SLIRP_SRCS:../slirp/%.c=obj/%.o)
+SLIRP_OBJS = $(SLIRP_SRCS:../../../shared/slirp/%.c=obj/%.o)
 
 USE_BINCUE = @USE_BINCUE@
 
 STANDALONE_GUI = @STANDALONE_GUI@
 GUI_CFLAGS = @GUI_CFLAGS@
 GUI_LIBS = @GUI_LIBS@
-GUI_SRCS = ../prefs.cpp prefs_unix.cpp prefs_editor_gtk.cpp ../prefs_items.cpp \
-	../user_strings.cpp user_strings_unix.cpp xpram_unix.cpp sys_unix.cpp rpc_unix.cpp \
+GUI_SRCS = ../../../shared/prefs.cpp ../../../shared/Unix/prefs_unix.cpp prefs_editor_gtk.cpp ../prefs_items.cpp \
+	../user_strings.cpp user_strings_unix.cpp ../../../shared/Unix/xpram_unix.cpp ../../../shared/Unix/sys_unix.cpp ../../../shared/Unix/rpc_unix.cpp \
 	../dummy/prefs_dummy.cpp
 
-GRESOURCE_SRCS = ui/help-overlay.ui ui/menu.ui ui/prefs-editor.ui
+GRESOURCE_SRCS = ../../../shared/Unix/ui/help-overlay.ui ui/menu.ui ../../../shared/Unix/ui/prefs-editor.ui
 GRESOURCE_XML = ui/sheepshaver.gresource.xml
 
-XPLAT_SRCS = ../CrossPlatform/vm_alloc.cpp ../CrossPlatform/sigsegv.cpp ../CrossPlatform/video_blit.cpp
+XPLAT_SRCS = ../../../shared/CrossPlatform/vm_alloc.cpp ../CrossPlatform/sigsegv.cpp ../../../shared/CrossPlatform/video_blit.cpp
 
 # Append disassembler to dyngen, if available
 ifneq (:no,$(MONSRCS):$(USE_DYNGEN))
@@ -64,14 +64,14 @@ DYNGENSRCS += $(filter %i386-dis.c,$(MONSRCS))
 endif
 
 ## Files
-SRCS = ../main.cpp main_unix.cpp ../prefs.cpp ../prefs_items.cpp prefs_unix.cpp sys_unix.cpp \
+SRCS = ../main.cpp main_unix.cpp ../../../shared/prefs.cpp ../prefs_items.cpp ../../../shared/Unix/prefs_unix.cpp ../../../shared/Unix/sys_unix.cpp \
     ../rom_patches.cpp ../rsrc_patches.cpp ../emul_op.cpp ../name_registry.cpp \
-    ../macos_util.cpp ../timer.cpp timer_unix.cpp ../xpram.cpp xpram_unix.cpp \
-    ../adb.cpp ../sony.cpp ../disk.cpp ../cdrom.cpp ../scsi.cpp \
-    ../gfxaccel.cpp ../video.cpp ../audio.cpp ../ether.cpp ../thunks.cpp \
-    ../serial.cpp ../extfs.cpp disk_sparsebundle.cpp tinyxml2.cpp \
-    about_window_unix.cpp ../user_strings.cpp user_strings_unix.cpp rpc_unix.cpp \
-    sshpty.c strlcpy.c $(XPLAT_SRCS) $(SYSSRCS) $(CPUSRCS) $(MONSRCS) $(SLIRP_SRCS)
+    ../macos_util.cpp ../../../shared/timer.cpp ../../../shared/Unix/timer_unix.cpp ../../../shared/xpram.cpp ../../../shared/Unix/xpram_unix.cpp \
+    ../../../shared/adb.cpp ../../../shared/sony.cpp ../../../shared/disk.cpp ../../../shared/cdrom.cpp ../../../shared/scsi.cpp \
+    ../gfxaccel.cpp ../video.cpp ../../../shared/audio.cpp ../ether.cpp ../thunks.cpp \
+    ../serial.cpp ../../../shared/extfs.cpp ../../../shared/Unix/disk_sparsebundle.cpp ../../../shared/Unix/tinyxml2.cpp \
+    about_window_unix.cpp ../user_strings.cpp user_strings_unix.cpp ../../../shared/Unix/rpc_unix.cpp \
+    ../../../shared/Unix/sshpty.c ../../../shared/Unix/strlcpy.c $(XPLAT_SRCS) $(SYSSRCS) $(CPUSRCS) $(MONSRCS) $(SLIRP_SRCS)
 APP = SheepShaver
 APP_EXE = $(APP)$(EXEEXT)
 APP_APP = $(APP).app
@@ -133,15 +133,15 @@ $(GUI_APP_EXE): $(OBJ_DIR) $(GUI_OBJS)
 $(APP)_app: $(APP) ../MacOSX/Info.plist ../MacOSX/$(APP).icns
 	rm -rf $(APP_APP)/Contents
 	mkdir -p $(APP_APP)/Contents
-	./cpr.sh ../MacOSX/Info.plist $(APP_APP)/Contents/
+	../../../shared/Unix/cpr.sh ../MacOSX/Info.plist $(APP_APP)/Contents/
 	echo -n 'APPL????' > $(APP_APP)/Contents/PkgInfo
 	mkdir -p $(APP_APP)/Contents/MacOS
-	./cpr.sh $(APP) $(APP_APP)/Contents/MacOS/
+	../../../shared/Unix/cpr.sh $(APP) $(APP_APP)/Contents/MacOS/
 	strip -x $(APP_APP)/Contents/MacOS/$(APP)
 	mkdir -p $(APP_APP)/Contents/Resources
 	mkdir -p $(APP_APP)/Contents/Resources/English.lproj
-	./cpr.sh ../MacOSX/Launcher/English.lproj/VMSettingsWindow.nib $(APP_APP)/Contents/Resources/English.lproj
-	./cpr.sh ../MacOSX/SheepShaver.icns $(APP_APP)/Contents/Resources/
+	../../../shared/Unix/cpr.sh ../MacOSX/Launcher/English.lproj/VMSettingsWindow.nib $(APP_APP)/Contents/Resources/English.lproj
+	../../../shared/Unix/cpr.sh ../MacOSX/SheepShaver.icns $(APP_APP)/Contents/Resources/
 
 $(GUI_APP)_app: $(GUI_APP) ../MacOSX/Info.plist ../MacOSX/$(APP).icns
 	rm -rf $(GUI_APP_APP)/Contents
@@ -149,13 +149,13 @@ $(GUI_APP)_app: $(GUI_APP) ../MacOSX/Info.plist ../MacOSX/$(APP).icns
 	sed -e "s/$(APP)/$(GUI_APP)/" < ../MacOSX/Info.plist > $(GUI_APP_APP)/Contents/Info.plist
 	echo -n 'APPL????' > $(GUI_APP_APP)/Contents/PkgInfo
 	mkdir -p $(GUI_APP_APP)/Contents/MacOS
-	./cpr.sh $(GUI_APP) $(GUI_APP_APP)/Contents/MacOS/
+	../../../shared/Unix/cpr.sh $(GUI_APP) $(GUI_APP_APP)/Contents/MacOS/
 	strip -x $(GUI_APP_APP)/Contents/MacOS/$(GUI_APP)
 	mkdir -p $(GUI_APP_APP)/Contents/Resources
-	./cpr.sh ../MacOSX/$(APP).icns $(GUI_APP_APP)/Contents/Resources/$(GUI_APP).icns
+	../../../shared/Unix/cpr.sh ../MacOSX/$(APP).icns $(GUI_APP_APP)/Contents/Resources/$(GUI_APP).icns
 
 modules:
-	cd Linux/NetDriver; make
+	cd ../../../shared/Unix/Linux/NetDriver; make
 
 install: $(PROGS) installdirs
 	$(INSTALL_PROGRAM) $(APP_EXE) $(DESTDIR)$(bindir)/$(APP_EXE)
@@ -164,11 +164,11 @@ install: $(PROGS) installdirs
 	fi
 	-$(INSTALL_DATA) $(APP).1 $(DESTDIR)$(man1dir)/$(APP).1
 	$(INSTALL_DATA) $(KEYCODES) $(DESTDIR)$(datadir)/$(APP)/keycodes
-	$(INSTALL_DATA) tunconfig $(DESTDIR)$(datadir)/$(APP)/tunconfig
+	$(INSTALL_DATA) ../../../shared/Unix/tunconfig $(DESTDIR)$(datadir)/$(APP)/tunconfig
 	chmod 755 $(DESTDIR)$(datadir)/$(APP)/tunconfig
 
 installdirs:
-	$(SHELL) mkinstalldirs $(DESTDIR)$(bindir) $(DESTDIR)$(man1dir) $(DESTDIR)$(datadir)/$(APP)
+	$(SHELL) ../../../shared/Unix/mkinstalldirs $(DESTDIR)$(bindir) $(DESTDIR)$(man1dir) $(DESTDIR)$(datadir)/$(APP)
 
 uninstall:
 	rm -f $(DESTDIR)$(bindir)/$(APP_EXE)
@@ -198,7 +198,7 @@ depend dep:
 
 $(OBJ_DIR)/SDLMain.o : SDLMain.m
 	$(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c $< -o $@
-$(OBJ_DIR)/%.o : ../slirp/%.c
+$(OBJ_DIR)/%.o : ../../../shared/slirp/%.c
 	$(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) $(SLIRP_CFLAGS) -c $< -o $@
 $(OBJ_DIR)/%.o : %.c
 	$(CC) $(CPPFLAGS) $(DEFS) $(CFLAGS) -c $< -o $@
@@ -290,7 +290,16 @@ test-powerpc$(EXEEXT): $(TESTOBJS)
 	$(CXX) -o $@ $(LDFLAGS) $(TESTOBJS) $(LIBS)
 
 g_resource.cpp: $(GRESOURCE_SRCS) $(GRESOURCE_XML)
-	$(GCR) --generate-source $(GRESOURCE_XML) --target $@
+	$(GCR) --sourcedir=. --sourcedir=../../../shared/Unix --generate-source $(GRESOURCE_XML) --target $@
 
 #-------------------------------------------------------------------------
 # DO NOT DELETE THIS LINE -- make depend depends on it.
+
+# Build Darwin helper executables locally from their common sources
+Darwin/lowmem: ../../../shared/Unix/Darwin/lowmem.c
+	mkdir -p Darwin
+	$(CC) $(CPPFLAGS) $(CFLAGS) $< -o $@
+
+Darwin/pagezero: ../../../shared/Unix/Darwin/pagezero.c
+	mkdir -p Darwin
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) $< -o $@

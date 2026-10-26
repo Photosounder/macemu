@@ -39,13 +39,13 @@ else
 	CPUSRCS = ../uae_cpu/basilisk_glue.cpp ../uae_cpu/newcpu.cpp \
 	    ../uae_cpu/readcpu.cpp ../uae_cpu/fpu/fpu_uae.cpp cpustbl.cpp cpudefs.cpp cpuemu.cpp
 endif
-SRCS = ../main.cpp main_beos.cpp ../prefs.cpp ../prefs_items.cpp prefs_beos.cpp \
-    prefs_editor_beos.cpp sys_beos.cpp ../rom_patches.cpp ../slot_rom.cpp \
-    ../rsrc_patches.cpp ../emul_op.cpp ../macos_util.cpp ../xpram.cpp \
-    xpram_beos.cpp ../timer.cpp timer_beos.cpp clip_beos.cpp ../adb.cpp \
-    ../serial.cpp serial_beos.cpp ../ether.cpp ether_beos.cpp ../sony.cpp \
-    ../disk.cpp ../cdrom.cpp ../scsi.cpp scsi_beos.cpp ../video.cpp \
-    video_beos.cpp ../audio.cpp audio_beos.cpp ../extfs.cpp extfs_beos.cpp \
+SRCS = ../main.cpp main_beos.cpp ../../../shared/prefs.cpp ../prefs_items.cpp prefs_beos.cpp \
+    prefs_editor_beos.cpp ../../../shared/BeOS/sys_beos.cpp ../rom_patches.cpp ../slot_rom.cpp \
+    ../rsrc_patches.cpp ../emul_op.cpp ../macos_util.cpp ../../../shared/xpram.cpp \
+    ../../../shared/BeOS/xpram_beos.cpp ../../../shared/timer.cpp ../../../shared/BeOS/timer_beos.cpp clip_beos.cpp ../../../shared/adb.cpp \
+    ../serial.cpp ../../../shared/BeOS/serial_beos.cpp ../ether.cpp ether_beos.cpp ../../../shared/sony.cpp \
+    ../../../shared/disk.cpp ../../../shared/cdrom.cpp ../../../shared/scsi.cpp ../../../shared/BeOS/scsi_beos.cpp ../video.cpp \
+    video_beos.cpp ../../../shared/audio.cpp ../../../shared/BeOS/audio_beos.cpp ../../../shared/extfs.cpp ../../../shared/BeOS/extfs_beos.cpp \
     ../user_strings.cpp user_strings_beos.cpp about_window.cpp \
     $(CPUSRCS)
 		
@@ -86,7 +86,7 @@ SYSTEM_INCLUDE_PATHS =
 #	additional paths to look for local headers
 #	thes use the form: #include "header"
 #	source file directories are automatically included
-LOCAL_INCLUDE_PATHS = ../include SheepDriver SheepNet
+LOCAL_INCLUDE_PATHS = ../include ../../../shared/BeOS/SheepDriver ../../../shared/BeOS/SheepNet ../../../shared/include ../../../shared/BeOS
 
 #	specify the level of optimization that you desire
 #	NONE, SOME, FULL

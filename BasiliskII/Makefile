@@ -13,7 +13,7 @@ MACOSXARCHIVE := $(VERNAME)-$(RELEASE).tar.gz
 
 TMPDIR := $(shell date +/tmp/build%M%S)
 ISODATE := $(shell date "+%Y-%m-%d %H:%M")
-DOCS := $(shell sed <BasiliskII.spec -n '/^\%doc */s///p')
+DOCS := $(patsubst BasiliskII/%,%,$(shell sed <BasiliskII.spec -n '/^\%doc */s///p'))
 SRCS := src
 
 default:
@@ -42,22 +42,13 @@ clean:
 tarball: $(SRCARCHIVE)
 
 $(SRCARCHIVE): $(SRCS) $(DOCS)
-	-rm -rf $(TMPDIR)
-	mkdir $(TMPDIR)
-	cd $(TMPDIR); cvs export -D "$(ISODATE)" BasiliskII
-	cd $(TMPDIR)/BasiliskII/src/Unix && NO_CONFIGURE=1 ./autogen.sh
-	cd $(TMPDIR)/BasiliskII/src/Windows && NO_CONFIGURE=1 ../Unix/autogen.sh
-	rm $(TMPDIR)/BasiliskII/Makefile
-	mv $(TMPDIR)/BasiliskII $(TMPDIR)/$(VERNAME)
-	cd $(TMPDIR); tar cfz $@ $(VERNAME)
-	mv $(TMPDIR)/$@ .
-	rm -rf $(TMPDIR)
+	sh ../tools/make-source-archive.sh BasiliskII $(VERSION) "$(CURDIR)/$@"
 
 #
 # RPMs (source and binary)
 #
 rpm: $(SRCARCHIVE)
-	rpmbuild -ta --clean $(SRCARCHIVE)
+	rpmbuild -ba --clean --define "_sourcedir $(CURDIR)" --define "source_archive $(SRCARCHIVE)" BasiliskII.spec
 
 #
 # Binary archive for AmigaOS

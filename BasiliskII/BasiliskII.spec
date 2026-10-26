@@ -8,7 +8,7 @@ Version: %{version}
 Release: %{release}
 License: GPL
 Group: Applications/Emulators
-Source0: %{name}_src_30062005.tar.gz
+Source0: %{?source_archive}%{!?source_archive:%{name}_src_30062005.tar.gz}
 URL: http://www.uni-mainz.de/~bauec002/B2Main.html
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -43,16 +43,16 @@ Some features of Basilisk II:
     processor
 
 %prep
-%setup -q
+%setup -q -n macemu-%{version}
 
 %build
-cd src/Unix
+cd BasiliskII/src/Unix
 %configure
 make
 
 %install
 rm -rf ${RPM_BUILD_ROOT}
-cd src/Unix
+cd BasiliskII/src/Unix
 %makeinstall
 
 %clean
@@ -60,7 +60,7 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %files
 %defattr(-,root,root)
-%doc ChangeLog COPYING INSTALL README TECH TODO
+%doc BasiliskII/ChangeLog BasiliskII/COPYING BasiliskII/INSTALL BasiliskII/README.md BasiliskII/TECH BasiliskII/TODO
 %{_bindir}/BasiliskII
 %{_mandir}/man1/BasiliskII.1*
 %config %{_datadir}/BasiliskII/keycodes

@@ -1,0 +1,38 @@
+src/emul_op.cpp: In function 'void EmulOp(M68kRegisters*, uint32, int)':
+src/emul_op.cpp:306:66: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+  306 |                                 memcpy((void *)DR_EMULATOR_BASE, (void *)(ROMBase + 0x370000), DR_EMULATOR_SIZE);
+      |                                                                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/video.cpp: In function 'bool VideoSnapshot(int, int, uint8*)':
+src/video.cpp:131:33: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+  131 |                 uint8 *screen = (uint8 *)private_data->saveBaseAddr;
+      |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+src/kpx_cpu/sheepshaver_glue.cpp: In member function 'void sheepshaver_cpu::execute_native_op(uint32)':
+src/kpx_cpu/sheepshaver_glue.cpp:1085:43: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1085 |                 gpr(3) = InitStreamModule((void *)gpr(3));
+      |                                           ^~~~~~~~~~~~~~
+src/kpx_cpu/sheepshaver_glue.cpp:1091:37: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1091 |                 gpr(3) = ether_open((queue_t *)gpr(3), (void *)gpr(4), gpr(5), gpr(6), (void*)gpr(7));
+      |                                     ^~~~~~~~~~~~~~~~~
+src/kpx_cpu/sheepshaver_glue.cpp:1091:56: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1091 |                 gpr(3) = ether_open((queue_t *)gpr(3), (void *)gpr(4), gpr(5), gpr(6), (void*)gpr(7));
+      |                                                        ^~~~~~~~~~~~~~
+src/kpx_cpu/sheepshaver_glue.cpp:1091:88: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1091 |                 gpr(3) = ether_open((queue_t *)gpr(3), (void *)gpr(4), gpr(5), gpr(6), (void*)gpr(7));
+      |                                                                                        ^~~~~~~~~~~~~
+src/kpx_cpu/sheepshaver_glue.cpp:1094:38: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1094 |                 gpr(3) = ether_close((queue_t *)gpr(3), gpr(4), (void *)gpr(5));
+      |                                      ^~~~~~~~~~~~~~~~~
+src/kpx_cpu/sheepshaver_glue.cpp:1094:65: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1094 |                 gpr(3) = ether_close((queue_t *)gpr(3), gpr(4), (void *)gpr(5));
+      |                                                                 ^~~~~~~~~~~~~~
+src/kpx_cpu/sheepshaver_glue.cpp:1097:37: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1097 |                 gpr(3) = ether_wput((queue_t *)gpr(3), (mblk_t *)gpr(4));
+      |                                     ^~~~~~~~~~~~~~~~~
+src/kpx_cpu/sheepshaver_glue.cpp:1097:56: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1097 |                 gpr(3) = ether_wput((queue_t *)gpr(3), (mblk_t *)gpr(4));
+      |                                                        ^~~~~~~~~~~~~~~~
+src/kpx_cpu/sheepshaver_glue.cpp:1100:37: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+ 1100 |                 gpr(3) = ether_rsrv((queue_t *)gpr(3));
+      |                                     ^~~~~~~~~~~~~~~~~
+C:/msys/ucrt64/bin/../lib/gcc/x86_64-w64-mingw32/16.2.0/../../../../x86_64-w64-mingw32/bin/ld.exe: cannot open output file sheepshaver.dll: Permission denied
+collect2.exe: error: ld returned 1 exit status
