@@ -23,7 +23,7 @@ fi
 mkdir -p "$build_dir"
 compiler=(clang --target=wasm32-unknown-emscripten --sysroot="$sysroot" -D__EMSCRIPTEN__=1
     -isystem "$sysroot/include/compat")
-flags=(-std=gnu++17 -O2 -g -fno-exceptions -pthread -D__EMSCRIPTEN_SHARED_MEMORY__=1 -mbulk-memory -msimd128
+flags=(-std=gnu++17 -O3 -g -fno-exceptions -pthread -D__EMSCRIPTEN_SHARED_MEMORY__=1 -mbulk-memory -msimd128
     -DMEM_BULK -DSHEEPSHAVER_WAHE -D_LIBCPP_ENABLE_CXX17_REMOVED_UNARY_BINARY_FUNCTION
     -Wno-deprecated-declarations -Wno-register -Wno-format -Wno-deprecated-enum-enum-conversion
     -Isrc/WAHE -I"$build_dir" -Isrc/include -Isrc/Windows -Isrc/kpx_cpu

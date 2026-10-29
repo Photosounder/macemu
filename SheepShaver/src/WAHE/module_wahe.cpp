@@ -20,7 +20,6 @@ static auto wahe_run_command_with_id = wasm_host_command;
 #endif
 
 static WaheRecursiveMutex api_mutex, host_mutex;
-static thread_local char reply[4096];
 static std::vector<float> output_image;
 static std::vector<float> output_audio;
 static bool mouse_capture_enabled, capture_key_down;
@@ -79,6 +78,9 @@ uint64 wahe_host_time()
 
 extern "C" EXPORT("module_message_input") char *module_message_input(char *message)
 {
+    // Keep command replies independent from media callbacks using the same runner
+    static thread_local char reply[4096];
+
     // Keep setup and lifecycle changes serialized independently from the emulation worker
     std::unique_lock<WaheRecursiveMutex> lock(api_mutex);
     reply[0] = 0;
@@ -248,6 +250,9 @@ extern "C" EXPORT("module_thread_entry") char *module_thread_entry(char *message
 
 extern "C" EXPORT("module_draw") char *module_draw(char *message)
 {
+    // Retain the video descriptor while another callback produces its own reply
+    static thread_local char reply[256];
+
     // Process connected SDLwindow events and publish an independent stable frame snapshot
 #ifndef __wasm32__
     try
@@ -272,6 +277,9 @@ extern "C" EXPORT("module_draw") char *module_draw(char *message)
 
 extern "C" EXPORT("module_proc_sound") char *module_proc_sound(char *message)
 {
+    // Retain the audio descriptor independently of video and command replies
+    static thread_local char reply[256];
+
     // Match the connected audio provider's request without opening a private audio device
 #ifndef __wasm32__
     try

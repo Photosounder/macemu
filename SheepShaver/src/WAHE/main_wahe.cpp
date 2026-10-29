@@ -100,6 +100,18 @@ bool wahe_stop_requested()
     return wahe_stopping.load();
 }
 
+static bool update_rtc()
+{
+    // Refresh the guest's local calendar once per monotonic second even when VBL ticks are inhibited
+    static uint64 next_rtc;
+    uint64 now = wahe_clock_usec.load();
+    if (now < next_rtc) return true;
+    if (!wahe_sync_wall_time()) return false;
+    WriteMacInt32(0x20c, TimerDateTime());
+    next_rtc = now + 1000000;
+    return true;
+}
+
 void wahe_check_stop()
 {
 #ifdef __wasm32__
@@ -107,17 +119,17 @@ void wahe_check_stop()
     if (wahe_stopping.load()) return;
     // Advance guest interrupts from callback time while the interpreter owns the CPU state
     static uint64 next_poll, next_vbl;
-    static unsigned ticks;
     if (on_cpu_runner) {
         uint64 now = wahe_host_time();
         wahe_clock_usec.store(now);
         if (ready.load() && !wahe_paused.load() && now >= next_poll) {
+            // Stop normally if the wall time provider fails during execution
+            if (!update_rtc()) return;
             next_poll = now + 1000;
             uint32 flags = INTFLAG_TIMER;
             if (now >= next_vbl && !tick_inhibit) {
                 next_vbl = now + 16625;
                 flags |= INTFLAG_VIA;
-                if (++ticks >= 60) { ticks = 0; WriteMacInt32(0x20c, TimerDateTime()); }
             }
             if (wahe_audio_needed()) flags |= INTFLAG_AUDIO;
             SetInterruptFlag(flags);
@@ -176,20 +188,21 @@ static void tick_worker()
 {
     // Feed host time and timer interrupts to the CPU without owning a presentation loop
     uint64 next_vbl = 0;
-    int ticks = 0;
     try {
         while (!wahe_stopping.load()) {
             uint64 now = wahe_host_time();
             wahe_clock_usec.store(now);
             if (ready.load() && !wahe_paused.load()) {
+                // Keep calendar updates independent of the guest's VBL interrupt state
+                if (!update_rtc()) {
+                    // Wake an idle guest so it can complete cooperative shutdown after a provider failure
+                    TriggerInterrupt();
+                    break;
+                }
                 uint32 flags = INTFLAG_TIMER;
                 if (now >= next_vbl && !tick_inhibit) {
                     next_vbl = now + 16625;
                     flags |= INTFLAG_VIA;
-                    if (++ticks >= 60) {
-                        ticks = 0;
-                        WriteMacInt32(0x20c, TimerDateTime());
-                    }
                 }
                 if (wahe_audio_needed()) flags |= INTFLAG_AUDIO;
                 SetInterruptFlag(flags);
@@ -273,6 +286,8 @@ static void cpu_worker()
         if (vm_protect(ROMBaseHost, ROM_AREA_SIZE, VM_PAGE_READ) < 0) return "Cannot protect guest ROM";
         wahe_check_stop();
         if (wahe_stopping.load()) return nullptr;
+        // Seed the Macintosh calendar before executing the ROM or starting the native ticker
+        if (!update_rtc()) return nullptr;
         {
             // Publish the initialized CPU under the same lock used by host shutdown
             std::lock_guard<WaheMutex> lock(cpu_lifetime_mutex);
@@ -354,6 +369,8 @@ void wahe_start()
     // Abort startup when the host clock failed validation
     if (wahe_stopping.load()) return;
 #endif
+    // Require the wall clock service before starting guest execution unless a manual epoch was supplied
+    if (!wahe_sync_wall_time()) return;
 #ifdef __wasm32__
     // Ask WAHE to run the CPU on a private stack and TLS block without a Wasm process entry point
     started.store(true);

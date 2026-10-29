@@ -11,8 +11,8 @@ Send to SheepShaver: SheepShaver RAM 64
 Send to SheepShaver: SheepShaver gamma table identity
 Send to SheepShaver: SheepShaver monitor gamma 1.8
 Send to SheepShaver: SheepShaver ROM path D:\Samsung F3\Principal\Bureau\Mac emulators\SheepShaver\macos8.6.rom
-Send to SheepShaver: SheepShaver disk path *D:\Samsung F3\Principal\Bureau\Mac emulators\SheepShaver\Mac HD.hfv
-Send to SheepShaver: SheepShaver disk path *D:\Samsung F3\Principal\Bureau\Mac emulators\SheepShaver\Apps.hfv
+Send to SheepShaver: SheepShaver disk path D:\Samsung F3\Principal\Bureau\Mac emulators\SheepShaver\Mac HD.hfv
+Send to SheepShaver: SheepShaver disk path D:\Samsung F3\Principal\Bureau\Mac emulators\SheepShaver\Apps.hfv
 Send to SheepShaver: SheepShaver sample rate 44100
 Send to System_audio: Audio sample rate 44100
 

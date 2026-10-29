@@ -7,7 +7,7 @@ const encoder = new TextEncoder(), decoder = new TextDecoder();
 const modulePath = process.argv[2] || new URL('../sheepshaver.wasm', import.meta.url);
 const module = isMainThread ? new WebAssembly.Module(fs.readFileSync(modulePath)) : workerData.module;
 const memory = isMainThread ? new WebAssembly.Memory({ initial: 256, maximum: 32768, shared: true }) : workerData.memory;
-const completion = isMainThread ? new Int32Array(new SharedArrayBuffer(12)) : new Int32Array(workerData.completion);
+const completion = isMainThread ? new Int32Array(new SharedArrayBuffer(16)) : new Int32Array(workerData.completion);
 const fixturePaths = isMainThread ? process.argv.slice(3) : workerData.fixturePaths;
 let instance, worker, workerAllocations = [];
 const files = new Map();
@@ -42,6 +42,14 @@ function hostCommand(pointer) {
     const command = readString(pointer);
     if (command.startsWith('Shrink memory to ')) return 0;
     if (command === 'Get raw time') return allocateString(process.env.WAHE_TEST_BAD_CLOCK ? 'Invalid clock' : `Raw time ${Number(process.hrtime.bigint()) / 1e9}`);
+    if (command === 'Get wall time') {
+        // Count startup and periodic calendar refreshes across the main host and CPU runner
+        Atomics.add(completion, 3, 1);
+        // Supply a paired host instant and local offset without introducing a Wasm OS import
+        if (process.env.WAHE_TEST_BAD_WALL_CLOCK) return allocateString('Invalid wall clock');
+        const now = new Date();
+        return allocateString(`Unix time ${now.getTime() / 1000} seconds\nUTC offset ${-now.getTimezoneOffset() * 60} seconds`);
+    }
     if (command === 'Get audio frame specs') return allocateString('Sample count: 512');
     if (command === 'Mouse grab' || command === 'Mouse release') return 0;
     if (command.startsWith('Print ')) {
@@ -158,6 +166,8 @@ if (!isMainThread) {
     assert.match(send('SheepShaver mouse capture on'), /on/);
     assert.match(send('SheepShaver mouse capture off'), /off/);
     assert.match(send('Documentation'), /RGBA float linear/);
+    // Exercise the manual baseline independently of an unavailable automatic wall time service
+    if (process.env.WAHE_TEST_MANUAL_CLOCK) assert.equal(send('SheepShaver clock unix 1700000000'), '');
     if (fixturePaths.length === 2) {
         // Boot the actual Macintosh image while drawing and sound callbacks run independently
         send(`SheepShaver ROM path ${fixturePaths[0]}`);
@@ -190,6 +200,8 @@ if (!isMainThread) {
             }
             assert(nonblank, 'Macintosh ROM never produced a nonblank framebuffer');
             assert(audioSeen, 'Audio callback never became available');
+            // Require repeated wall time callbacks while the interpreted Macintosh is running
+            assert(Atomics.load(completion, 3) >= 3, 'Guest calendar was not refreshed after startup');
             console.log(`PASS: real Macintosh boot, ${frames} Wasm frames, linear framebuffer, audio and input`);
         } finally {
             // Always join the CPU before the host releases fixture and module resources
@@ -207,7 +219,12 @@ if (!isMainThread) {
             await new Promise(resolve => setTimeout(resolve, 10));
             status = send('Status');
         } while (!status.includes('failed') && Date.now() < deadline);
-        assert.match(status, process.env.WAHE_TEST_BAD_CLOCK ? /Error: Host did not provide Get raw time/ : /Error: Cannot open ROM/);
+        // Require clock failures to surface at startup while the explicit override bypasses wall time queries
+        const expected = process.env.WAHE_TEST_BAD_CLOCK ? /Error: Host did not provide Get raw time/ :
+            process.env.WAHE_TEST_BAD_WALL_CLOCK && !process.env.WAHE_TEST_MANUAL_CLOCK ? /Error: Host did not provide Get wall time/ : /Error: Cannot open ROM/;
+        assert.match(status, expected);
+        // Verify that choosing the manual baseline removes the wall time service dependency
+        if (process.env.WAHE_TEST_MANUAL_CLOCK) assert.equal(Atomics.load(completion, 3), 0);
         send('Deinit');
         assert.match(send('Status'), /State: failed/);
     }

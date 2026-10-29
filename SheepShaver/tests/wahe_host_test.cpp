@@ -32,7 +32,7 @@ struct Host {
     std::recursive_mutex mutex;
     std::map<size_t, File> files;
     std::string rom, disk, last_log;
-    size_t next_handle = 1, reads = 0, writes = 0, time_queries = 0;
+    size_t next_handle = 1, reads = 0, writes = 0, time_queries = 0, wall_time_queries = 0;
     size_t mouse_grabs = 0, mouse_releases = 0;
     bool mouse_captured = false;
 
@@ -83,6 +83,11 @@ struct Host {
             char reply[128];
             snprintf(reply, sizeof(reply), "Raw time %.9f", seconds);
             return host.response(reply);
+        }
+        if (text == "Get wall time") {
+            // Supply a fractional UTC instant and daylight saving offset through the host callback
+            ++host.wall_time_queries;
+            return host.response("Unix time 1793263567.750000000 seconds\nUTC offset +3600 seconds");
         }
         if (text == "Get audio frame specs") {
             // Exercise synchronous host reentrancy while drawing and CPU file access run on other threads
@@ -261,7 +266,7 @@ int main(int argc, char **argv)
         assert(host.send("SheepShaver monitor gamma 1.8").find("Error:") == 0);
         // Keep gamma-table policy immutable while the CPU may use guest or cached correction data
         assert(host.send("SheepShaver gamma table identity").find("Error:") == 0);
-        assert(host.files.empty() && host.time_queries && host.reads);
+        assert(host.files.empty() && host.time_queries && host.wall_time_queries && host.reads);
         assert(!host.draw(nullptr) && !host.sound(nullptr));
     }
     puts("PASS: exports, callback setup, invalid configuration, asynchronous startup failure, cleanup and unload");
@@ -351,5 +356,7 @@ int main(int argc, char **argv)
     audio_worker.join();
     assert(audio_calls.load() > 10);
     assert(host.files.empty() && host.reads > 10);
+    // Require periodic host calendar refreshes after startup while the real Macintosh is running
+    assert(host.wall_time_queries >= 3);
     printf("PASS: actual Macintosh ROM, nonblank RGBA frames, audio callbacks, input, disk I/O, joined shutdown (%zu reads, %zu writes)\n", host.reads, host.writes);
 }

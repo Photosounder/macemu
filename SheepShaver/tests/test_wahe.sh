@@ -4,6 +4,10 @@ export PATH="/ucrt64/bin:/usr/bin:$PATH"
 cd "$(dirname "$0")/.."
 mkdir -p build-wahe
 ${CXX:-g++} -std=gnu++17 -O2 -static -DMEM_BULK -DSHEEPSHAVER_WAHE \
+    -Isrc/WAHE -Isrc/include -I../shared/include -I../shared/Windows -I../shared/CrossPlatform -Isrc/Windows -Isrc/kpx_cpu/include -Isrc/kpx_cpu/src \
+    tests/wahe_clock_test.cpp src/WAHE/timer_wahe.cpp -o build-wahe/wahe_clock_test.exe
+build-wahe/wahe_clock_test.exe
+${CXX:-g++} -std=gnu++17 -O2 -static -DMEM_BULK -DSHEEPSHAVER_WAHE \
     -Isrc/WAHE -Isrc/include -I../shared/include -I../shared/Windows -I../shared/CrossPlatform -I../shared/uae_cpu/compiler -Isrc/Windows -Isrc/kpx_cpu/include -Isrc/kpx_cpu/src \
     tests/wahe_av_test.cpp src/WAHE/video_wahe.cpp src/WAHE/audio_wahe.cpp src/WAHE/vm_wahe.cpp \
     -o build-wahe/wahe_av_test.exe

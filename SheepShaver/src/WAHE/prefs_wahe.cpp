@@ -52,7 +52,11 @@ const char *wahe_configure(const std::string &line)
     else if (sscanf(line.c_str(), "SheepShaver resolution %dx%d", &width, &height) == 2 &&
         width >= 320 && height >= 200 && width <= 1920 && height <= 1200) { wahe_width = width; wahe_height = height; }
     else if (sscanf(line.c_str(), "SheepShaver sample rate %d", &value) == 1 && value >= 8000 && value <= 48000) wahe_sample_rate = value;
-    else if (sscanf(line.c_str(), "SheepShaver clock unix %llu", &epoch) == 1 && epoch <= 0xffffffffULL) wahe_epoch = epoch;
+    else if (sscanf(line.c_str(), "SheepShaver clock unix %llu", &epoch) == 1 && epoch <= 0xffffffffULL) {
+        // Keep the explicit epoch as a fixed baseline instead of automatically synchronizing host wall time
+        wahe_epoch = epoch;
+        wahe_epoch_configured = true;
+    }
     else return "Unknown or invalid SheepShaver configuration command";
     // Indicate that the complete configuration command was accepted
     return nullptr;

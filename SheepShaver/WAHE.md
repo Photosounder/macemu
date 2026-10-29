@@ -174,9 +174,21 @@ handles output encoding. No host display gamma ramp is changed. Calibrations
 installed in the guest must target this virtual display to reproduce their
 intended response.
 
-The host drives elapsed time through `Get raw time`. Supply `SheepShaver clock
-unix` to set the guest's wall-clock date; without it, the date starts at the Unix
-epoch. The module does not query the operating system's wall clock.
+The host drives elapsed time through the monotonic `Get raw time` service.
+By default, both native and Wasm modules obtain the current date through
+OS_Basics' `Get wall time` service, whose reply contains `Unix time <fractional
+seconds> seconds` and `UTC offset <signed integer> seconds` on separate lines.
+The offset is local time minus UTC, including daylight saving time at that
+instant. SheepShaver sets the guest's clock to local seconds since 1904 at
+startup and refreshes it once per second, including after pause/resume. Host
+clock adjustments and daylight saving transitions affect the guest's calendar
+without changing the monotonic timers.
+
+`SheepShaver clock unix <seconds>` retains its previous behavior as an optional
+manual startup baseline: the clock advances from that value, with no automatic
+host synchronization or UTC offset added. Without this override, a missing or
+invalid wall time response is reported in `Status` and the host console; update
+OS_Basics if its installed version does not support the service.
 
 ## Callbacks and ownership
 

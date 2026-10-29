@@ -20,6 +20,7 @@ struct WaheStop {};
 extern std::atomic<bool> wahe_stopping, wahe_running, wahe_paused;
 extern std::atomic<uint64> wahe_clock_usec;
 extern uint64 wahe_clock_origin, wahe_epoch;
+extern bool wahe_epoch_configured;
 extern int wahe_width, wahe_height, wahe_sample_rate;
 extern double wahe_monitor_gamma;
 extern bool wahe_force_identity_gamma;
@@ -38,6 +39,7 @@ bool wahe_frame(std::vector<float> &pixels, int &width, int &height);
 void wahe_audio_pull(float *output, size_t frames);
 bool wahe_audio_needed();
 uint64 wahe_host_time();
+bool wahe_sync_wall_time();
 
 struct WaheFile { size_t handle; uint64 position; bool read_only; };
 WaheFile *wahe_file_open(const std::string &path, const char *mode);
